@@ -1,0 +1,48 @@
+(sort StrSet (Set String))
+
+(datatype Ty
+    (Var StrSet f64) ;; variables + error
+    (Star Ty f64 Ty)) ;; homomorphism
+
+(let aVar (Var (set-insert (set-empty) "a") 1.0))
+(let bVar (Var (set-insert (set-empty) "b") 2.0))
+(let cVar (Var (set-insert (set-empty) "c") 2.0))
+(let bcVar (Var (set-insert (set-insert (set-empty) "b") "c") 2.0))
+
+(let initial (Star (Star aVar 0.0 bVar) 0.0 cVar))
+
+(relation -> (Ty Ty))
+(rule ((-> a b) (-> b c))
+    ((-> a c)))
+(rule ((-> a b) (-> b a))
+    ((union a b)))
+
+;; tensor congruence
+(rule ((-> a b) (= lhs (Star a 0.0 c)))
+    ((-> lhs (Star b 0.0 c))))
+
+;; congruence: star
+; (rule ((-> b c) (= lhs (Star a b)))
+;     ((-> lhs (Star a c))))
+
+;; tensor symmetry
+(rule ((= lhs (Star a 0.0 b)))
+    ((-> lhs (Star b 0.0 a))))
+
+;; tensor associativity
+(rule ((= lhs (Star (Star a 0.0 b) 0.0 c)))
+    ((-> lhs (Star a 0.0 (Star b 0.0 c)))))
+
+;; projections
+(rule ((= lhs (Star a i b)))
+    ((-> lhs a) (-> lhs b)))
+
+;; combiner
+(rule ((= lhs (Star (Var xs p1) i (Var ys p2))) 
+       (= p2 (abs (* p1 (- i 1.0)))))
+    ((-> lhs (Var (set-union xs ys) p1))))
+
+(run-schedule (saturate (run)))
+
+(check (= initial (Star (Star cVar 0.0 aVar) 0.0 bVar)))
+(check (= initial (Star bcVar 0.0 aVar)))
