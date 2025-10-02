@@ -7,24 +7,18 @@
 (relation -> (Ty Ty))
 (rule ((-> a b) (-> b c))
     ((-> a c)))
-(rule ((-> a b) (-> b a))
-    ((union a b)))
 
 ;; tensor congruence
 (rule ((-> a b) (= lhs (Star a 0.0 c)))
     ((-> lhs (Star b 0.0 c))))
 
-;; congruence: star
-; (rule ((-> b c) (= lhs (Star a b)))
-;     ((-> lhs (Star a c))))
-
 ;; tensor symmetry
 (rule ((= lhs (Star a 0.0 b)))
-    ((-> lhs (Star b 0.0 a))))
+    ((union lhs (Star b 0.0 a))))
 
 ;; tensor associativity
 (rule ((= lhs (Star (Star a 0.0 b) 0.0 c)))
-    ((-> lhs (Star a 0.0 (Star b 0.0 c)))))
+    ((union lhs (Star a 0.0 (Star b 0.0 c)))))
 
 ;; projections
 (rule ((= lhs (Star a i b)))
