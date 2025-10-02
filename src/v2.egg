@@ -1,10 +1,14 @@
 (sort StrSet (Set String))
 
+(datatype Ob
+    (R String) ;; real variable
+    (Rs Ob Ob) ;; combined variables
+    (Add Ob Ob) ;; add
+    (Mul Ob Ob)) ;; mul
+
 (datatype Ty
-    (Var StrSet f64) ;; variables + error
-    (Star Ty f64 Ty) ;; homomorphism
-    (Add StrSet f64) ;; add
-    (DMul Ty Ty f64)) ;; dmul
+    (Var Ob f64) ;; object + error
+    (Star Ty f64 Ty))
 
 (relation -> (Ty Ty))
 (rule ((-> a b) (-> b c))
@@ -15,45 +19,64 @@
 ;; tensor congruence
 (rule ((-> a b) (= lhs (Star a 0.0 c)))
     ((-> lhs (Star b 0.0 c))))
-
-;; congruence: star
-; (rule ((-> b c) (= lhs (Star a b)))
-;     ((-> lhs (Star a c))))
-
+;; star congruence
 ;; tensor symmetry
 (rule ((= lhs (Star a 0.0 b)))
     ((-> lhs (Star b 0.0 a))))
-
 ;; tensor associativity
 (rule ((= lhs (Star (Star a 0.0 b) 0.0 c)))
     ((-> lhs (Star a 0.0 (Star b 0.0 c)))))
-
 ;; projections
 (rule ((= lhs (Star a i b)))
     ((-> lhs a) (-> lhs b)))
 
 ;; combiner
-(rule ((= lhs (Star (Var xs p1) i (Var ys p2))) 
-       (= p2 (* p1 (abs (- i 1.0)))))
-    ((-> lhs (Var (set-union xs ys) p1))))
+(rule (
+    (= lhs (Star ty1 i ty2)) 
+    (= ty1 (Var ob1 p1))
+    (= ty2 (Var ob2 p2))
+    (= p2 (* p1 (abs (- i 1.0))))
+)(
+    (-> lhs (Var (Rs ob1 ob2) p1))
+))
 
-;; addition
-(rule ((= lhs (Var xs p)) (= 2 (set-length xs)) (>= p 1.0))
-    ((-> lhs (Add xs (- p 1.0)))))
+;; add
+(rule (
+    (= lhs (Var ob p))
+    (= ob (Rs a b))
+    (>= p 1.0)
+)(
+    (-> lhs (Var (Add a b) (- p 1.0)))
+))
 
-(let aVar (Var (set-insert (set-empty) "a") 1.0))
-(let bVar (Var (set-insert (set-empty) "b") 2.0))
-(let cVar (Var (set-insert (set-empty) "c") 2.0))
-(let dVar (Var (set-insert (set-empty) "d") 0.0))
-(let adVar (Var (set-insert (set-insert (set-empty) "a") "d") 1.0))
-(let bcVar (Var (set-insert (set-insert (set-empty) "b") "c") 2.0))
-(let addAD (Add (set-insert (set-insert (set-empty) "a") "d") 0.0))
+;; mul
+(rule (
+    (= lhs (Var ob p)) 
+    (= ob (Rs a b))
+    (>= p 0.5)
+)(
+    (-> lhs (Var (Mul a b) (- (* p 2.0) 1.0)))
+))
+
+;; dmul
+(rule (
+    (= lhs (Star ty1 i ty2)) 
+    (= ty1 (Var ob1 p1)) 
+    (= ty2 (Var ob2 p2))
+    (>= p2 1.0)
+)(
+    (-> lhs (Star ty1 (+ i 1.0) (Var (Mul ob1 ob2) (- p2 1.0))))
+))
+
+(let aVar (Var (R "a") 1.5))
+(let bVar (Var (R "b") 1.5))
+(let cVar (Var (R "c") 0.5))
+(let dVar (Var (R "d") 1.0))
 
 (let ex1 (Star (Star aVar 0.0 bVar) 0.0 cVar))
-(let ex2 (Star aVar 1.0 dVar))
+(let ex2 (Var (Mul (R "c") (Add (R "b") (R "a"))) 0.0))
+(let ex3 (Star cVar 0.0 (Var (Add (R "a") (R "b")) 0.5)))
 
 (run-schedule (saturate (run)))
-
-(check (= ex1 (Star (Star bVar 0.0 cVar) 0.0 aVar)))
-(check (-> ex1 (Star bcVar 0.0 aVar)))
-(check (-> ex2 addAD))
+(check (-> ex1 ex3))
+(check (-> ex1 ex2))
