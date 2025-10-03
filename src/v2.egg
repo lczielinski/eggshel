@@ -1,5 +1,3 @@
-(sort StrSet (Set String))
-
 (datatype Ob
     (R String) ;; real variable
     (Rs Ob Ob) ;; combined variables
