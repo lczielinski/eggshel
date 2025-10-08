@@ -14,35 +14,54 @@
 (rewrite (Compose (Compose e1 e2) e3)
     (Compose e1 (Compose e2 e3)))
 
-(rule ((= lhs (Compose f (Var 1))) 
-       (!= f (Pair e1 e2)))
-    ((union lhs f)))
-(rule ((= lhs (Compose (Pair e1 e2) (Var 1))) 
-       (!= e1 (Pair e3 e4)))
-    ((union lhs e1)))
-; (rule ((= lhs (Compose (Pair e1 e2) (Var i)))
-;        (!= e1 (Pair e3 e4)) 
-;        (> i 1))
-;     ((union lhs (Compose e2 (Var (- i 1))))))
+; case f ∘ (Var 1), take first component
+(rewrite (Compose (Var i) (Var 1))
+    (Var i))
+(rewrite (Compose (Add e1 e2) (Var 1))
+    (Add e1 e2))
+(rewrite (Compose (Mul e1 e2) (Var 1))
+    (Mul e1 e2))
+(rewrite (Compose (Pair (Var i) e1) (Var 1))
+    (Var i))
+(rewrite (Compose (Pair (Add e1 e2) e3) (Var 1))
+    (Add e1 e2))
+(rewrite (Compose (Pair (Mul e1 e2) e3) (Var 1))
+    (Mul e1 e2))
+; case f ∘ (Var j), take jth component
+(rule ((= e (Compose (Pair (Var i) e1) (Var j)))
+       (> j 1))
+    ((union e (Compose e1 (Var (- j 1))))))
+(rule ((= e (Compose (Pair (Add e1 e2) e3) (Var j)))
+       (> j 1))
+    ((union e (Compose e3 (Var (- j 1))))))
+(rule ((= e (Compose (Pair (Mul e1 e2) e3) (Var j)))
+       (> j 1))
+    ((union e (Compose e3 (Var (- j 1))))))
+; case f ∘ Add
 (rewrite (Compose f (Add e1 e2)) 
     (Add (Compose f e1) (Compose f e2)))
+; case f ∘ Mul
 (rewrite (Compose f (Mul e1 e2)) 
     (Mul (Compose f e1) (Compose f e2)))
+; case f ∘ Pair
 (rewrite (Compose f (Pair e1 e2)) 
     (Pair (Compose f e1) (Compose f e2)))
 
+; f1(x, y) = (x + y, y, y * y)
+(let f1 (Pair (Add (Var 1) (Var 2)) (Pair (Var 2) (Mul (Var 2) (Var 2)))))
+; f2(x, y, z) = (x * z, y)
+(let f2 (Pair (Mul (Var 1) (Var 3)) (Var 2)))
+; f3(x, y) = (x + y) * y
+(let f3 (Mul (Add (Var 1) (Var 2)) (Var 2)))
+; f4(x, y) = ((x + y) * y * y + y) * y
+(let f4 (Mul (Add (Mul (Add (Var 1) (Var 2)) (Mul (Var 2) (Var 2))) (Var 2)) (Var 2)))
 
-(let f1 (Pair (Var 1) (Var 1)))
-(let f2 (Pair (Add (Var 1) (Var 2)) (Mul (Var 1) (Var 2))))
-(let f3 (Add (Var 1) (Var 2)))
-(let f4 (Compose (Pair (Var 1) (Var 2)) (Var 1)))
+(let comp (Compose f1 (Compose f2 f3)))
 
-; (run-schedule (saturate (run)))
-(run 6)
+(run-schedule (saturate (run)))
+; (run 6)
 
-; (check (= (Compose f1 f2) (Pair (Add (Var 1) (Var 1)) (Mul (Var 1) (Var 1)))))
-; (check (= (Compose f1 f3) (Add (Var 1) (Var 1))))
-(check (= f4 (Var 1)))
+(check (= f4 comp))
 
 ; (relation -> (Ob Ob f))
 ; (rule ((-> a b f) (-> b c g))
