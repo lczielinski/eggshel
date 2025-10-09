@@ -3,28 +3,50 @@
   (Add Expr Expr) ; add
   (Mul Expr Expr) ; multiply
   (Pair Expr Expr) ; function R^n -> R^m
-  (Id i64) ; identity R^n -> R^n
   (Compose Expr Expr) ; compose functions
   (Shift Expr i64)) ; shift everything over
 
 (rewrite (Pair (Pair e1 e2) e3) 
     (Pair e1 (Pair e2 e3)))
+
+; identity R^n -> R^n
+(function id (Nat) Expr :no-merge)
+
+(set (id (One)) (Var 1))
+(rule ((= e (S n)) 
+    ;    (= call (id e))
+       (= f (id n)) 
+       (= m (nat-to-i64 e)))
+    ((set (id e) (Pair f (Var m)))))
+
+(let _two (S (One)))
+(run-schedule (saturate (run)))
+(query-extract (id _two))
+
+; shift Vars in expression by n
+(function shift (Expr Nat) Expr :no-merge)
+
+(rule ((= e (Var i)))
+    ;    (= call (shift e (One))))
+    ((set (shift e (One)) (Var (+ i 1)))))
+(rule ((= e (Var i))
+       (= n (S m))
+       (= call (shift e n))
+       (= sub (shift (Var (+ i 1)) m)))
+    ((set (shift e n) sub)))
+
 (rewrite (Compose (Compose e1 e2) e3)
     (Compose e1 (Compose e2 e3)))
-(rewrite (Id 1)
-    (Var 1))
-(rule ((= e (Id n)) (> n 1))
-    ((union e (Pair (Id (- n 1)) (Var n)))))
-(rewrite (Shift (Var i) 1)
-    (Var (+ i 1)))
-(rule ((= e (Shift (Var i) n)) (> n 1))
-    ((union e (Shift (Var (+ i 1)) (- n 1)))))
-(rewrite (Shift (Add e1 e2) i)
-    (Add (Shift e1 i) (Shift e2 i)))
-(rewrite (Shift (Mul e1 e2) i)
-    (Mul (Shift e1 i) (Shift e2 i)))
-(rewrite (Shift (Pair e1 e2) i)
-    (Pair (Shift e1 i) (Shift e2 i)))
+; (rewrite (Shift (Var i) 1)
+;     (Var (+ i 1)))
+; (rule ((= e (Shift (Var i) n)) (> n 1))
+;     ((union e (Shift (Var (+ i 1)) (- n 1)))))
+; (rewrite (Shift (Add e1 e2) i)
+;     (Add (Shift e1 i) (Shift e2 i)))
+; (rewrite (Shift (Mul e1 e2) i)
+;     (Mul (Shift e1 i) (Shift e2 i)))
+; (rewrite (Shift (Pair e1 e2) i)
+;     (Pair (Shift e1 i) (Shift e2 i)))
 
 ; case f ∘ (Var 1), take first component
 (rewrite (Compose (Var i) (Var 1))
@@ -77,10 +99,8 @@
 (let _g3 (Add (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1)))) (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1))))))
 (let _compg (Compose _g1 _g2))
 
-(let _id4 (Shift (Id 4) 2))
 
 (run-schedule (saturate (run)))
 
-(check (= _id4 (Pair (Var 3) (Pair (Var 4) (Pair (Var 5) (Var 6))))))
 (check (= _f4 _compf))
 (check (= _g3 _compg))
