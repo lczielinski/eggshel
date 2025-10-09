@@ -1,122 +1,70 @@
 (datatype Ob ; a Shel object
     (Base i64 f64) ; (R^n, R, p)
-    (Star Ob i64 Ob)) ; X (x)_i Y
+    (Star Ob f64 Ob)) ; X (x)_i Y
 
-(datatype Expr
-  (Var i64)
-  (Add Expr Expr)
-  (Mul Expr Expr)
-  (Pair Expr Expr) ; function R^n -> R^m
-  (Compose Expr Expr))
+(relation -> (Ob Ob Expr))
+(rule ((-> X Y f) (-> Y Z g))
+    ((-> X Z (Compose f g))))
 
-(rewrite (Pair (Pair e1 e2) e3) 
-    (Pair e1 (Pair e2 e3)))
-(rewrite (Compose (Compose e1 e2) e3)
-    (Compose e1 (Compose e2 e3)))
+; tensor congruence: need to generalize
+(rule (
+    (-> X Y f) 
+    (= X (Base n p1))
+    (= Z (Base 1 p3))
+)(
+    (-> (Star X 0.0 Z) (Star Y 0.0 Z) (Pair f (Var (+ n 1))))
+))
+(rule (
+    (-> X Y f) 
+    (= X (Star (Base n1 p1) i (Base n2 p2)))
+    (= Z (Base 1 p3))
+)(
+    (-> (Star X 0.0 Z) (Star Y 0.0 Z) (Pair f (Var (+ n1 (+ n2 1)))))
+))
+; star congruence
+; tensor symmetry
+(rewrite (Star X 0.0 Y) (Star Y 0.0 X)) ; should not be a rewrite
+; tensor associativity
+(rewrite (Star (Star X 0.0 Y) 0.0 Z)
+         (Star X 0.0 (Star Y 0.0 Z)))
+; projections
+(rule ((= e (Star (Base 1 p1) i (Base 1 p2))))
+    ((-> e (Base 1 p1) (Var 1)) (-> e (Base 1 p2) (Var 2)))) ; generalize
 
-; case f ∘ (Var 1), take first component
-(rewrite (Compose (Var i) (Var 1))
-    (Var i))
-(rewrite (Compose (Add e1 e2) (Var 1))
-    (Add e1 e2))
-(rewrite (Compose (Mul e1 e2) (Var 1))
-    (Mul e1 e2))
-(rewrite (Compose (Pair (Var i) e1) (Var 1))
-    (Var i))
-(rewrite (Compose (Pair (Add e1 e2) e3) (Var 1))
-    (Add e1 e2))
-(rewrite (Compose (Pair (Mul e1 e2) e3) (Var 1))
-    (Mul e1 e2))
-; case f ∘ (Var j), take jth component
-(rule ((= e (Compose (Pair (Var i) e1) (Var j)))
-       (> j 1))
-    ((union e (Compose e1 (Var (- j 1))))))
-(rule ((= e (Compose (Pair (Add e1 e2) e3) (Var j)))
-       (> j 1))
-    ((union e (Compose e3 (Var (- j 1))))))
-(rule ((= e (Compose (Pair (Mul e1 e2) e3) (Var j)))
-       (> j 1))
-    ((union e (Compose e3 (Var (- j 1))))))
-; case f ∘ Add
-(rewrite (Compose f (Add e1 e2)) 
-    (Add (Compose f e1) (Compose f e2)))
-; case f ∘ Mul
-(rewrite (Compose f (Mul e1 e2)) 
-    (Mul (Compose f e1) (Compose f e2)))
-; case f ∘ Pair
-(rewrite (Compose f (Pair e1 e2)) 
-    (Pair (Compose f e1) (Compose f e2)))
+; combiner
+(rule (
+    (= e (Star (Base 1 p1) i (Base 1 p2)))
+    (= p2 (* p1 (abs (- i 1.0))))
+)(
+    (-> e (Base (+ 1 1) p1) (Pair (Var 1) (Var 2)))
+)) ; should be id (n1 + n2)
 
-; f1(x, y) = (x + y, y, y * y)
-(let f1 (Pair (Add (Var 1) (Var 2)) (Pair (Var 2) (Mul (Var 2) (Var 2)))))
-; f2(x, y, z) = (x * z, y)
-(let f2 (Pair (Mul (Var 1) (Var 3)) (Var 2)))
-; f3(x, y) = (x + y) * y
-(let f3 (Mul (Add (Var 1) (Var 2)) (Var 2)))
-; f4(x, y) = ((x + y) * y * y + y) * y
-(let f4 (Mul (Add (Mul (Add (Var 1) (Var 2)) (Mul (Var 2) (Var 2))) (Var 2)) (Var 2)))
+; add
+(rule (
+    (= e (Base 2 p))
+    (>= p 1.0)
+)(
+    (-> e (Base 1 (- p 1.0)) (Add (Var 1) (Var 2)))
+))
 
-(let comp (Compose f1 (Compose f2 f3)))
+; mul
+(rule (
+    (= e (Base 2 p))
+    (>= p 0.5)
+)(
+    (-> e (Base 1 (- (* p 2.0) 1.0)) (Mul (Var 1) (Var 2)))
+))
 
-(run-schedule (saturate (run)))
-; (run 6)
+; dmul
+(rule (
+    (= e (Star ob1 i ob2))
+    (= ob1 (Base 1 p1))
+    (= ob2 (Base 1 p2))
+    (>= p2 1.0)
+)(
+    (-> e (Star ob1 (+ i 1.0) (Base 1 (- p2 1.0))) (Mul (Var 1) (Var 2)))
+))
 
-(check (= f4 comp))
-
-; (relation -> (Ob Ob f))
-; (rule ((-> a b f) (-> b c g))
-;     ((-> a c (Compose f g))))
-
-; ;; tensor congruence
-; (rule ((-> a b) (= lhs (Star a 0.0 c)))
-;     ((-> lhs (Star b 0.0 c))))
-; ;; star congruence
-; ;; tensor symmetry
-; (rewrite (Star a 0.0 b) (Star b 0.0 a))
-; ;; tensor associativity
-; (rewrite (Star (Star a 0.0 b) 0.0 c)
-;          (Star a 0.0 (Star b 0.0 c)))
-; ;; projections
-; (rule ((= lhs (Star a i b)))
-;     ((-> lhs a) (-> lhs b)))
-
-; ;; combiner
-; (rule (
-;     (= lhs (Star ty1 i ty2)) 
-;     (= ty1 (Var ob1 p1))
-;     (= ty2 (Var ob2 p2))
-;     (= p2 (* p1 (abs (- i 1.0))))
-; )(
-;     (-> lhs (Var (Rs ob1 ob2) p1))
-; ))
-
-; ;; add
-; (rule (
-;     (= lhs (Var ob p))
-;     (= ob (Rs a b))
-;     (>= p 1.0)
-; )(
-;     (-> lhs (Var (Add a b) (- p 1.0)))
-; ))
-
-; ;; mul
-; (rule (
-;     (= lhs (Var ob p)) 
-;     (= ob (Rs a b))
-;     (>= p 0.5)
-; )(
-;     (-> lhs (Var (Mul a b) (- (* p 2.0) 1.0)))
-; ))
-
-; ;; dmul
-; (rule (
-;     (= lhs (Star ty1 i ty2)) 
-;     (= ty1 (Var ob1 p1)) 
-;     (= ty2 (Var ob2 p2))
-;     (>= p2 1.0)
-; )(
-;     (-> lhs (Star ty1 (+ i 1.0) (Var (Mul ob1 ob2) (- p2 1.0))))
-; ))
 
 ; ;; (a_p1 (x)_i b) (x) c_p+p2 --> a_p1 (x)_i (b (x) c_p2)
 ; (rule (
@@ -163,3 +111,5 @@
 ; (check (-> ex5 ex6))
 ; (check (-> ex5 ex7))
 ; ; (check (-> ex5 ex8))
+
+(run-schedule (saturate (run)))
