@@ -1,52 +1,40 @@
 (datatype Expr
+  ; functions R^n -> R^m
   (Var i64) ; projection
   (Add Expr Expr) ; add
   (Mul Expr Expr) ; multiply
-  (Pair Expr Expr) ; function R^n -> R^m
-  (Compose Expr Expr) ; compose functions
-  (Shift Expr i64)) ; shift everything over
+  (Pair Expr Expr) ; (f(x), g(x))
+  ; intermediate expressions
+  (Id i64) ; identity R^n -> R^n
+  (Shift Expr i64) ; shift Vars over
+  (Compose Expr Expr)) ; compose functions
 
+; pairing is associative
 (rewrite (Pair (Pair e1 e2) e3) 
     (Pair e1 (Pair e2 e3)))
 
-; identity R^n -> R^n
-(function id (Nat) Expr :no-merge)
-
-(set (id (One)) (Var 1))
-(rule ((= e (S n)) 
-    ;    (= call (id e))
-       (= f (id n)) 
-       (= m (nat-to-i64 e)))
-    ((set (id e) (Pair f (Var m)))))
-
-(let _two (S (One)))
-(run-schedule (saturate (run)))
-(query-extract (id _two))
-
-; shift Vars in expression by n
-(function shift (Expr Nat) Expr :no-merge)
-
-(rule ((= e (Var i)))
-    ;    (= call (shift e (One))))
-    ((set (shift e (One)) (Var (+ i 1)))))
-(rule ((= e (Var i))
-       (= n (S m))
-       (= call (shift e n))
-       (= sub (shift (Var (+ i 1)) m)))
-    ((set (shift e n) sub)))
-
+; composition is associative
 (rewrite (Compose (Compose e1 e2) e3)
     (Compose e1 (Compose e2 e3)))
-; (rewrite (Shift (Var i) 1)
-;     (Var (+ i 1)))
-; (rule ((= e (Shift (Var i) n)) (> n 1))
-;     ((union e (Shift (Var (+ i 1)) (- n 1)))))
-; (rewrite (Shift (Add e1 e2) i)
-;     (Add (Shift e1 i) (Shift e2 i)))
-; (rewrite (Shift (Mul e1 e2) i)
-;     (Mul (Shift e1 i) (Shift e2 i)))
-; (rewrite (Shift (Pair e1 e2) i)
-;     (Pair (Shift e1 i) (Shift e2 i)))
+
+; evaluating Id
+(rewrite (Id 1) (Var 1))
+(rule ((= e (Id n)) 
+       (> n 1))
+    ((union e (Pair (Id (- n 1)) (Var n)))))
+
+; evaluating Shift
+(rewrite (Shift (Var i) 1)
+    (Var (+ i 1)))
+(rule ((= e (Shift (Var i) n)) 
+       (> n 1))
+    ((union e (Shift (Var (+ i 1)) (- n 1)))))
+(rewrite (Shift (Add e1 e2) i)
+    (Add (Shift e1 i) (Shift e2 i)))
+(rewrite (Shift (Mul e1 e2) i)
+    (Mul (Shift e1 i) (Shift e2 i)))
+(rewrite (Shift (Pair e1 e2) i)
+    (Pair (Shift e1 i) (Shift e2 i)))
 
 ; case f ∘ (Var 1), take first component
 (rewrite (Compose (Var i) (Var 1))
@@ -61,6 +49,7 @@
     (Add e1 e2))
 (rewrite (Compose (Pair (Mul e1 e2) e3) (Var 1))
     (Mul e1 e2))
+    
 ; case f ∘ (Var j), take jth component
 (rule ((= e (Compose (Pair (Var i) e1) (Var j)))
        (> j 1))
@@ -71,6 +60,7 @@
 (rule ((= e (Compose (Pair (Mul e1 e2) e3) (Var j)))
        (> j 1))
     ((union e (Compose e3 (Var (- j 1))))))
+
 ; case f ∘ Add
 (rewrite (Compose f (Add e1 e2)) 
     (Add (Compose f e1) (Compose f e2)))
@@ -81,14 +71,20 @@
 (rewrite (Compose f (Pair e1 e2)) 
     (Pair (Compose f e1) (Compose f e2)))
 
+; examples
+
+(let _id4 (Shift (Id 4) 2))
+
 ; f1(x, y) = (x + y, y, y * y)
-(let _f1 (Pair (Add (Var 1) (Var 2)) (Pair (Var 2) (Mul (Var 2) (Var 2)))))
+(let _f1 (Pair (Add (Var 1) (Var 2)) 
+    (Pair (Var 2) (Mul (Var 2) (Var 2)))))
 ; f2(x, y, z) = (x * z, y)
 (let _f2 (Pair (Mul (Var 1) (Var 3)) (Var 2)))
 ; f3(x, y) = (x + y) * y
 (let _f3 (Mul (Add (Var 1) (Var 2)) (Var 2)))
-; f4(x, y) = ((x + y) * y * y + y) * y
-(let _f4 (Mul (Add (Mul (Add (Var 1) (Var 2)) (Mul (Var 2) (Var 2))) (Var 2)) (Var 2)))
+; f4(x, y) = ((x + y) * (y * y)) + y) * y
+(let _f4 (Mul (Add (Mul (Add (Var 1) (Var 2)) 
+    (Mul (Var 2) (Var 2))) (Var 2)) (Var 2)))
 (let _compf (Compose _f1 (Compose _f2 _f3)))
 
 ; g1(x) = (x, x * (x + x))
@@ -96,11 +92,12 @@
 ; g2(x, y) = (x * y) + (x * y)
 (let _g2 (Add (Mul (Var 1) (Var 2)) (Mul (Var 1) (Var 2))))
 ; g3(x) = (x * (x * (x + x))) + (x * (x * (x + x)))
-(let _g3 (Add (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1)))) (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1))))))
+(let _g3 (Add (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1)))) 
+    (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1))))))
 (let _compg (Compose _g1 _g2))
-
 
 (run-schedule (saturate (run)))
 
+(check (= _id4 (Pair (Var 3) (Pair (Var 4) (Pair (Var 5) (Var 6))))))
 (check (= _f4 _compf))
 (check (= _g3 _compg))

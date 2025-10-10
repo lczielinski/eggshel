@@ -19,9 +19,7 @@
 ;; tensor symmetry
 (rule ((= lhs (Star a 0.0 b)))
     ((union lhs (Star b 0.0 a))))
-;; tensor associativity
-(rule ((= lhs (Star (Star a 0.0 b) 0.0 c)))
-    ((union lhs (Star a 0.0 (Star b 0.0 c)))))
+
 ;; projections
 (rule ((= lhs (Star a i b)))
     ((-> lhs a) (-> lhs b)))

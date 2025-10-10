@@ -1,0 +1,106 @@
+; if -> X Y f, then f : X -> Y is a morphism
+(relation -> (Ob Ob Expr))
+
+; composition
+(rule ((-> X Y f) (-> Y Z g))
+    ((-> X Z (Compose f g))))
+
+; tensor congruence right
+(rule ((-> X Y f)
+       (= e (Star X 0.0 Z))
+       (= nX (dim X))
+       (= nZ (dim Z)))
+    ((-> e (Star Y 0.0 Z) (Pair f (Shift (Id nZ) nX)))))
+
+; tensor congruence left
+(rule ((-> X Y f)
+       (= e (Star Z 0.0 X))
+       (= nZ (dim Z)))
+    ((-> e (Star Z 0.0 Y) (Pair (Id nZ) (Shift f nZ)))))
+
+; star congruence
+
+; tensor symmetry
+(rule ((= e (Star X 0.0 Y))
+       (= nX (dim X))
+       (= nY (dim Y)))
+    ((-> e (Star Y 0.0 X) (Pair (Shift (Id nY) nX) (Id nX)))))
+
+; projections
+(rule ((= e (Star X i Y))
+       (= nX (dim X))
+       (= nY (dim Y)))
+    ((-> e X (Id nX))
+     (-> e Y (Shift (Id nY) nX))))
+
+; combiner
+(rule ((= e (Star (Base n1 p1) i (Base n2 p2)))
+       (= p2 (* p1 (abs (- i 1.0))))
+       (= sum (+ n1 n2)))
+    ((-> e (Base sum p1) (Id sum))))
+
+; add
+(rule ((= e (Base 2 p))
+       (>= p 1.0)
+       (= q (- p 1.0)))
+    ((-> e (Base 1 q) (Add (Var 1) (Var 2)))))
+
+; mul
+(rule ((= e (Base 2 p))
+       (>= p 0.5)
+       (= q (- (* p 2.0) 1.0)))
+    ((-> e (Base 1 q) (Mul (Var 1) (Var 2)))))
+
+; dmul
+(rule ((= e (Star ob1 i ob2))
+       (= ob1 (Base 1 p1))
+       (= ob2 (Base 1 p2))
+       (>= p2 1.0)
+       (= q (- p2 1.0))
+       (= j (+ i 1.0)))
+    ((-> e (Star ob1 j (Base 1 q)) (Mul (Var 1) (Var 2)))))
+
+;; (a_p1 (x)_i b) (x) c_p+p2 --> a_p1 (x)_i (b (x) c_p2)
+; (rule (
+;     (= lhs (Star (Star ty1 i ty3) 0.0 ty2))
+;     (= ty1 (Var ob1 p1))
+;     (= ty2 (Var ob2 p2))
+;     (= p (* i p1))
+;     (>= p2 p)
+; )(
+;     (-> lhs (Star ty1 i (Star ty3 0.0 (Var ob2 (- p2 p)))))
+; ))
+
+(let _a0 (Base 1 0.0))
+(let _a05 (Base 1 0.5))
+(let _a1 (Base 1 1.0))
+(let _a2 (Base 1 2.0))
+(let _ab0 (Base 2 0.0))
+(let _ab1 (Base 2 1.0))
+(let _ab2 (Base 2 2.0))
+
+(let _ex1 (Star (Star _a2 0.0 _a2) 0.0 _a0))
+(let _ex2 (Star (Star _a2 0.0 _a2) 0.0 _a1))
+
+;; c_1 (x) (a + b)_1
+; (let ex2 (Star (Var (R "c") 1.0) 0.0 (Var (Add (R "a") (R "b")) 1.0))) 
+; ;; c_1 (x)_1 (c * (a + b))_0
+; (let ex3 (Star (Var (R "c") 1.0) 1.0 (Var (Mul (R "c") (Add (R "a") (R "b"))) 0.0)))
+;; (c + c * (a + b))_0
+
+; ;; d_2 (x) e_1 (x) f_2
+; (let ex5 (Star (Star dVar 0.0 eVar) 0.0 fVar))
+; ;; (e_1 (x)_1 (e * d)_1) (x) f_2
+; (let ex6 (Star (Star eVar 1.0 edVar) 0.0 fVar))
+; ;; e_1 (x)_1 ((e * d)_1 (x) f_1)
+; (let ex7 (Star eVar 1.0 (Star edVar 0.0 (Var (R "f") 1.0))))
+; ;; d + ((e * d) + f)
+; (let ex8 (Var (Add (R "e") (Add (Mul (R "e") (R "d")) (R "f"))) 0.0))
+
+(run-schedule (saturate (run)))
+
+(let _ex1f (Mul (Var 3) (Add (Var 1) (Var 2))))
+; (let _ex2f (Add (Var 3) (Mul (Var 3) (Add (Var 1) (Var 2)))))
+
+(check (-> _ex1 _a0 _ex1f))
+; (check (-> _ex2 _a0 _ex2f))
