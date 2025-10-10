@@ -60,16 +60,15 @@
        (= j (+ i 1.0)))
     ((-> e (Star ob1 j (Base 1 q)) (Mul (Var 1) (Var 2)))))
 
-;; (a_p1 (x)_i b) (x) c_p+p2 --> a_p1 (x)_i (b (x) c_p2)
-; (rule (
-;     (= lhs (Star (Star ty1 i ty3) 0.0 ty2))
-;     (= ty1 (Var ob1 p1))
-;     (= ty2 (Var ob2 p2))
-;     (= p (* i p1))
-;     (>= p2 p)
-; )(
-;     (-> lhs (Star ty1 i (Star ty3 0.0 (Var ob2 (- p2 p)))))
-; ))
+; (a_p1 (x)_i b) (x) c_p+p2 --> a_p1 (x)_i (b (x) c_p2)
+(rule ((= e (Star (Star ob1 i ob2) 0.0 ob3))
+       (= ob1 (Base n1 p1))
+       (= dim2 (dim ob2))
+       (= ob3 (Base n3 p3))
+       (= p (* i p1))
+       (>= p3 p)
+       (= id (Id (+ n1 (+ dim2 n3)))))
+    ((-> e (Star ob1 i (Star ob2 0.0 (Base n3  p3))) id)))
 
 (let _a0 (Base 1 0.0))
 (let _a05 (Base 1 0.5))
@@ -79,7 +78,7 @@
 (let _ab1 (Base 2 1.0))
 (let _ab2 (Base 2 2.0))
 
-(let _ex1 (Star (Star _a2 0.0 _a2) 0.0 _a0))
+; (let _ex1 (Star (Star _a2 0.0 _a2) 0.0 _a0))
 (let _ex2 (Star (Star _a2 0.0 _a2) 0.0 _a1))
 
 ;; c_1 (x) (a + b)_1
@@ -99,8 +98,9 @@
 
 (run-schedule (saturate (run)))
 
-(let _ex1f (Mul (Var 3) (Add (Var 1) (Var 2))))
+; (let _ex1f (Mul (Var 3) (Add (Var 1) (Var 2))))
 ; (let _ex2f (Add (Var 3) (Mul (Var 3) (Add (Var 1) (Var 2)))))
+(let _ex3f (Pair (Var 3) (Add (Var 1) (Var 2))))
 
 (check (-> _ex1 _a0 _ex1f))
-; (check (-> _ex2 _a0 _ex2f))
+(check (-> _ex2 (Star _a1 0.0 _a2) _ex3f))
