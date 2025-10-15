@@ -15,7 +15,14 @@
 ;; tensor congruence
 (rule ((-> a b) (= lhs (Star a 0.0 c)))
     ((-> lhs (Star b 0.0 c))))
+
+;; tensor associativity
+(rule ((= lhs (Star (Star a 0.0 b) 0.0 c)))
+    ((union lhs (Star a 0.0 (Star b 0.0 c)))))
+
 ;; star congruence
+
+
 ;; tensor symmetry
 (rule ((= lhs (Star a 0.0 b)))
     ((union lhs (Star b 0.0 a))))
@@ -25,53 +32,41 @@
     ((-> lhs a) (-> lhs b)))
 
 ;; combiner
-(rule (
-    (= lhs (Star ty1 i ty2)) 
-    (= ty1 (Var ob1 p1))
-    (= ty2 (Var ob2 p2))
-    (= p2 (* p1 (abs (- i 1.0))))
-)(
-    (-> lhs (Var (Rs ob1 ob2) p1))
-))
+(rule ((= lhs (Star ty1 i ty2)) 
+       (= ty1 (Var ob1 p1))
+       (= ty2 (Var ob2 p2))
+       (= p2 (* p1 (abs (- i 1.0)))))
+    ((-> lhs (Var (Rs ob1 ob2) p1))))
 
 ;; add
-(rule (
-    (= lhs (Var ob p))
-    (= ob (Rs a b))
-    (>= p 1.0)
-)(
-    (-> lhs (Var (Add a b) (- p 1.0)))
-))
+(rule ((= lhs (Var ob p))
+       (= ob (Rs a b))
+       (>= p 1.0))
+    ((-> lhs (Var (Add a b) (- p 1.0)))))
 
 ;; mul
-(rule (
-    (= lhs (Var ob p)) 
-    (= ob (Rs a b))
-    (>= p 0.5)
-)(
-    (-> lhs (Var (Mul a b) (- (* p 2.0) 1.0)))
-))
+(rule ((= lhs (Var ob p)) 
+       (= ob (Rs a b))
+       (>= p 0.5))
+    ((-> lhs (Var (Mul a b) (- (* p 2.0) 1.0)))))
 
 ;; dmul
-(rule (
-    (= lhs (Star ty1 i ty2)) 
-    (= ty1 (Var ob1 p1)) 
-    (= ty2 (Var ob2 p2))
-    (>= p2 1.0)
-)(
-    (-> lhs (Star ty1 (+ i 1.0) (Var (Mul ob1 ob2) (- p2 1.0))))
-))
+(rule ((= lhs (Star ty1 i ty2)) 
+       (= ty1 (Var ob1 p1)) 
+       (= ty2 (Var ob2 p2))
+       (>= p2 1.0))
+    ((-> lhs (Star ty1 (+ i 1.0) (Var (Mul ob1 ob2) (- p2 1.0))))))
 
 ;; (a_p1 (x)_i b) (x) c_p+p2 --> a_p1 (x)_i (b (x) c_p2)
-(rule (
-    (= lhs (Star (Star ty1 i ty3) 0.0 ty2))
-    (= ty1 (Var ob1 p1))
-    (= ty2 (Var ob2 p2))
-    (= p (* i p1))
-    (>= p2 p)
-)(
-    (-> lhs (Star ty1 i (Star ty3 0.0 (Var ob2 (- p2 p)))))
-))
+(rule ((= lhs (Star (Star ty1 i ty3) 0.0 ty2))
+       (= ty1 (Var ob1 p1))
+       (= ty2 (Var ob2 p2))
+       (= p (* i p1))
+       (>= p2 p))
+    ((-> lhs (Star ty1 i (Star ty3 0.0 (Var ob2 (- p2 p)))))))
+
+;; 
+
 
 (let aVar (Var (R "a") 2.0))
 (let bVar (Var (R "b") 2.0))

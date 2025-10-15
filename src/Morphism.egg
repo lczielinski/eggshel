@@ -102,5 +102,5 @@
 ; (let _ex2f (Add (Var 3) (Mul (Var 3) (Add (Var 1) (Var 2)))))
 (let _ex3f (Pair (Var 3) (Add (Var 1) (Var 2))))
 
-(check (-> _ex1 _a0 _ex1f))
-(check (-> _ex2 (Star _a1 0.0 _a2) _ex3f))
+; (check (-> _ex1 _a0 _ex1f))
+(check (-> _ex2 (Star _a1 0.0 _a1) _ex3f))

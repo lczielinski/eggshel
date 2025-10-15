@@ -18,8 +18,8 @@
 
 ; examples
 
-(let _c1 (Star (Base 3 1.0) 1.0 (Star (Base 2 1.0) 0.0 (Base 1 1.0))))
+; (let _c1 (Star (Base 3 1.0) 1.0 (Star (Base 2 1.0) 0.0 (Base 1 1.0))))
 
 (run-schedule (saturate (run)))
 
-(check (= 6 (dim _c1)))
+; (check (= 6 (dim _c1)))

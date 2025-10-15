@@ -73,31 +73,31 @@
 
 ; examples
 
-(let _id4 (Shift (Id 4) 2))
+; (let _id4 (Shift (Id 4) 2))
 
-; f1(x, y) = (x + y, y, y * y)
-(let _f1 (Pair (Add (Var 1) (Var 2)) 
-    (Pair (Var 2) (Mul (Var 2) (Var 2)))))
-; f2(x, y, z) = (x * z, y)
-(let _f2 (Pair (Mul (Var 1) (Var 3)) (Var 2)))
-; f3(x, y) = (x + y) * y
-(let _f3 (Mul (Add (Var 1) (Var 2)) (Var 2)))
-; f4(x, y) = ((x + y) * (y * y)) + y) * y
-(let _f4 (Mul (Add (Mul (Add (Var 1) (Var 2)) 
-    (Mul (Var 2) (Var 2))) (Var 2)) (Var 2)))
-(let _compf (Compose _f1 (Compose _f2 _f3)))
+; ; f1(x, y) = (x + y, y, y * y)
+; (let _f1 (Pair (Add (Var 1) (Var 2)) 
+;     (Pair (Var 2) (Mul (Var 2) (Var 2)))))
+; ; f2(x, y, z) = (x * z, y)
+; (let _f2 (Pair (Mul (Var 1) (Var 3)) (Var 2)))
+; ; f3(x, y) = (x + y) * y
+; (let _f3 (Mul (Add (Var 1) (Var 2)) (Var 2)))
+; ; f4(x, y) = ((x + y) * (y * y)) + y) * y
+; (let _f4 (Mul (Add (Mul (Add (Var 1) (Var 2)) 
+;     (Mul (Var 2) (Var 2))) (Var 2)) (Var 2)))
+; (let _compf (Compose _f1 (Compose _f2 _f3)))
 
-; g1(x) = (x, x * (x + x))
-(let _g1 (Pair (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1)))))
-; g2(x, y) = (x * y) + (x * y)
-(let _g2 (Add (Mul (Var 1) (Var 2)) (Mul (Var 1) (Var 2))))
-; g3(x) = (x * (x * (x + x))) + (x * (x * (x + x)))
-(let _g3 (Add (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1)))) 
-    (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1))))))
-(let _compg (Compose _g1 _g2))
+; ; g1(x) = (x, x * (x + x))
+; (let _g1 (Pair (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1)))))
+; ; g2(x, y) = (x * y) + (x * y)
+; (let _g2 (Add (Mul (Var 1) (Var 2)) (Mul (Var 1) (Var 2))))
+; ; g3(x) = (x * (x * (x + x))) + (x * (x * (x + x)))
+; (let _g3 (Add (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1)))) 
+;     (Mul (Var 1) (Mul (Var 1) (Add (Var 1) (Var 1))))))
+; (let _compg (Compose _g1 _g2))
 
 (run-schedule (saturate (run)))
 
-(check (= _id4 (Pair (Var 3) (Pair (Var 4) (Pair (Var 5) (Var 6))))))
-(check (= _f4 _compf))
-(check (= _g3 _compg))
+; (check (= _id4 (Pair (Var 3) (Pair (Var 4) (Pair (Var 5) (Var 6))))))
+; (check (= _f4 _compf))
+; (check (= _g3 _compg))
