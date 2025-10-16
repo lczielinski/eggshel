@@ -1,11 +1,13 @@
 (datatype Expr
     (Var String) ;; variable
+    (Vars Expr Expr) ;; shared variables
     (Add Expr Expr) ;; add
-    (Mul Expr Expr)) ;; mul
+    (Mul Expr Expr) ;; mul
+    (Sqrt Expr)) ;; square root
 
 (datatype Ob
-    (Base Expr f64) ;; object (R, R, p)
-    (Star Ob f64 Ob)) ;; (R, R, p) (x)_i X where i(s) = (s, ..., s)
+    (Base Expr f64) ;; object (R^n, R, p)
+    (Star Ob f64 Ob)) ;; X_1 (x)_i X_2 where i(s) = (s, ..., s)
 
 (relation <- (Ob Ob))
 (rule ((<- a b) (<- b c))
@@ -26,19 +28,15 @@
 (rewrite (Star a 0.0 b)
     (Star b 0.0 a))
 
-;; projections
-; (rule ((= e (Star a i b)))
-;     ((<- a e) (<- b e)))
-
-;; decombiner
+; ;; decombiner
 ; (rule ((= e (Base (Vars e1 e2) p)))
 ;     ((<- e (Star (Base e1 p) 0.0 (Base e2 p)))))
 
-;; decombiner, push 1
+; ;; decombiner, push 1
 ; (rule ((= e (Base (Vars e1 e2) p)))
 ;     ((<- e (Star (Base e1 p) 1.0 (Base e2 0.0)))))
 
-;; decombiner, push 2
+; ;; decombiner, push 2
 ; (rule ((= e (Base (Vars e1 e2) p)))
 ;     ((<- e (Star (Base e1 p) 2.0 (Base e2 p)))))
 
@@ -56,6 +54,11 @@
 (rule ((= e (Base (Add a b) p))
        (= q (+ p 1.0)))
     ((<- e (Star (Base a q) 2.0 (Base b q)))))
+
+;; duplicate add, R -> R
+(rule ((= e (Base (Add a a) p))
+       (= q (+ p 1.0)))
+    ((<- e (Base a q))))
 
 ;; dependent add, R (x)_i (R (x) R) -> R (x)_i R
 (rule ((= e (Star ob1 i ob2))
@@ -87,6 +90,11 @@
        (= q (+ p2 1.0)))
     ((<- e (Star ob1 j (Base b q)))))
 
+;; square root, R -> R
+(rule ((= e (Base (Sqrt a) p))
+       (= q (+ (* p 2.0) 2.0)))
+    ((<- e (Base a q))))
+
 ;; (R (x)_i X) (x) R -> R (x)_i (X (x) R)
 (rule ((= e (Star ob1 i (Star ob2 0.0 ob3)))
        (= ob1 (Base e1 p1))
@@ -94,7 +102,9 @@
        (= q (+ p3 (* i p1))))
     ((<- e (Star (Star ob1 i ob2) 0.0 (Base e3 q)))))
 
-
+(let _a2 (Base (Var "a") 2.0))
+(let _b2 (Base (Var "b") 2.0))
+(let _c (Base (Var "c") 2.0))
 (let _d (Base (Var "d") 2.0))
 (let _e (Base (Var "e") 1.0))
 (let _f (Base (Var "f") 2.0))
