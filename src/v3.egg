@@ -21,46 +21,40 @@
 (rewrite (Star (Star a 0.0 b) 0.0 c)
     (Star a 0.0 (Star b 0.0 c)))
 
-;; star congruence
-
-
 ;; tensor symmetry
 (rewrite (Star a 0.0 b)
     (Star b 0.0 a))
 
-; ;; decombiner
-; (rule ((= e (Base (Vars e1 e2) p)))
-;     ((<- e (Star (Base e1 p) 0.0 (Base e2 p)))))
+;; decombiner
+(rule ((= e (Base (Vars e1 e2) p)))
+    ((<- e (Star (Base e1 p) 0.0 (Base e2 p)))))
+;; dependent
+(rule ((= e (Star ob1 i ob2))
+       (= ob2 (Base (Vars e1 e2) p)))
+    ((<- e (Star ob1 i (Star (Base e1 p) 0.0 (Base e2 p))))))
 
-; ;; decombiner, push 1
-; (rule ((= e (Base (Vars e1 e2) p)))
-;     ((<- e (Star (Base e1 p) 1.0 (Base e2 0.0)))))
+;; decombiner, push 1
+(rule ((= e (Base (Vars e1 e2) p)))
+    ((<- e (Star (Base e1 p) 1.0 (Base e2 0.0)))))
+;; dependent
+; (rule ((= e (Star ob1 i ob2))
+;        (= ob2 (Base (Vars e1 e2) p)))
+;     ((<- e (Star ob1 i (Star (Base e1 p) 1.0 (Base e2 0.0))))))
 
-; ;; decombiner, push 2
-; (rule ((= e (Base (Vars e1 e2) p)))
-;     ((<- e (Star (Base e1 p) 2.0 (Base e2 p)))))
+;; decombiner, push 2
+(rule ((= e (Base (Vars e1 e2) p)))
+    ((<- e (Star (Base e1 p) 2.0 (Base e2 p)))))
+
+;; duplicator
+(rule ((= e (Base (Vars e1 e1) p)))
+    ((<- e (Base e1 p))))
 
 ;; add, R (x) R -> R
 (rule ((= e (Base (Add a b) p))
        (= q (+ p 1.0)))
-    ((<- e (Star (Base a q) 0.0 (Base b q)))))
+    ((<- e (Base (Vars a b) q))))
 
-;; add, R (x)_1 R -> R
-(rule ((= e (Base (Add a b) p))
-       (= q (+ p 1.0)))
-    ((<- e (Star (Base a q) 1.0 (Base b 0.0)))))
-
-;; add, R (x)_2 R -> R
-(rule ((= e (Base (Add a b) p))
-       (= q (+ p 1.0)))
-    ((<- e (Star (Base a q) 2.0 (Base b q)))))
-
-;; duplicate add, R -> R
-(rule ((= e (Base (Add a a) p))
-       (= q (+ p 1.0)))
-    ((<- e (Base a q))))
-
-;; dependent add, R (x)_i (R (x) R) -> R (x)_i R
+;; dependent add, R (x)_i (R x R) -> R (x)_i R
 (rule ((= e (Star ob1 i ob2))
        (= ob2 (Base (Add a b) p))
        (= q (+ p 1.0)))
@@ -69,17 +63,7 @@
 ;; mul, R (x) R -> R
 (rule ((= e (Base (Mul a b) p))
        (= q (* (+ p 1.0) 0.5)))
-    ((<- e (Star (Base a q) 0.0 (Base b q)))))
-
-;; mul, R (x)_1 R -> R
-(rule ((= e (Base (Mul a b) p))
-       (= q (* (+ p 1.0) 0.5)))
-    ((<- e (Star (Base a q) 1.0 (Base b 0.0)))))
-
-;; mul, R (x)_2 R -> R
-(rule ((= e (Base (Mul a b) p))
-       (= q (* (+ p 1.0) 0.5)))
-    ((<- e (Star (Base a q) 2.0 (Base b q)))))
+    ((<- e (Base (Vars a b) q))))
 
 ;; dmul, R (x)_j R -> R (x)_i R
 (rule ((= e (Star ob1 i ob2))
