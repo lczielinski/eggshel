@@ -1,0 +1,14 @@
+; represents a valid morphism, X -f-> Y, and 
+; 
+; given X -id-> X -f-> Y,
+; return X -f-> Y -id-> Y
+(relation R (Ob Expr Ob Expr))
+
+; composition
+(rule ((<- Y X f) (<- Z Y g))
+    ((<- Z Y (Compose f g))))
+
+; add
+(rule ((= f (Add e1 e2))
+       (= ob (Base 1 p)))
+    ((<- ob (Base 2 (+ p 1.0)) (Pair (Var 1) (Var 2)))))
