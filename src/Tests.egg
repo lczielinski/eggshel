@@ -14,15 +14,19 @@
 (let _b2 (Base 0.0 _b 2.0))
 (let _b3 (Base 0.0 _b 3.0))
 (let _c1 (Base 0.0 _c 1.0))
+(let _c15 (Base 0.0 _c 1.5))
 (let _c2 (Base 0.0 _c 2.0))
 (let _c3 (Base 0.0 _c 3.0))
 (let _c4 (Base 0.0 _c 4.0))
 (let _d1 (Base 0.0 (Var "d") 1.0))
 (let _d2 (Base 0.0 (Var "d") 2.0))
+(let _d25 (Base 0.0 (Var "d") 2.5))
 (let _d3 (Base 0.0 (Var "d") 3.0))
 (let _e1 (Base 0.0 (Var "e") 1.0))
 (let _e2 (Base 0.0 (Var "e") 2.0))
+(let _e25 (Base 0.0 (Var "e") 2.5))
 (let _e3 (Base 0.0 (Var "e") 3.0))
+(let _const (Base 0.0 (Var "1") 0.0))
 
 
 (let _ex1 (Base 0.0 (Mul (Add _a (Mul _a _b)) _c) 0.0))
@@ -31,9 +35,14 @@
 (let _ex2 (Base 0.0 (Add (Mul _a _a) (Mul _b _b)) 0.0))
 (let _ctx2 (Tens _a1 _b1))
 
-(let _ex3 (Base 0.0 (Add (Add (Mul _a _b) (Mul (Mul _a _a) _c)) _a) 0.0))
-(let _ctx3 (Tens _a1 (Tens _b3 _c4)))
+(let _ex3 (Base 0.0 (Add (Add (Mul _a _b) (Mul (Mul _a _c) _a)) _a) 0.0))
+(let _ctx3 (Tens _a1 (Tens _b2 _c4)))
+
+(let _ex4 (Base 0.0 (Add _a (Add _b (Mul _c (Add _d _e)))) 0.0))
+(let _ctx4 (Tens _a1 (Tens _b2 (Tens _c15 (Tens _d25 _e25)))))
 
 (run-schedule (saturate (run)))
 (check (<- _ex1 _ctx1))
 (check (<- _ex2 _ctx2))
+(check (<- _ex3 _ctx3))
+(check (<- _ex4 _ctx4))

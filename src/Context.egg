@@ -2,9 +2,26 @@
 (rule ((= e (Base 0.0 (Mul e1 e2) p)))
     ((<- e (Star (Base 0.0 e1 0.0) (Base 1.0 (Mul e1 e2) p)))))
 
-;; (R (x)_i X) (x) R -> R (x)_i (X (x) R)
-; (rule ((= e (Star ob1 i (Star ob2 0.0 ob3)))
-;        (= ob1 (Base e1 p1))
-;        (= ob3 (Base e3 p3))
-;        (= q (+ p3 (* i p1))))
-;     ((<- e (Star (Star ob1 i ob2) 0.0 (Base e3 q)))))
+;; (a * b) (x) c -> a * c (x) c)
+(rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+       (= ctx3 (Base 0.0 e1 p)))
+    ((<- e (Tens (Star ctx1 ctx2) ctx3))))
+
+;; push adjuster
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx2 (Base i e1 p))
+       (< i 2.0)
+       (= j (+ i 1.0))
+       (>= 1.0 p)
+       (= q (- p 1.0)))
+    ((<- e (Star ctx1 (Base j e1 q)))))
+
+;; push adjuster with sibling
+(rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+       (= ctx2 (Base i e1 p))
+       (< i 2.0)
+       (= j (+ i 1.0))
+       (>= 1.0 p)
+       (= q (+ p 1.0)))
+    ((<- e (Star ctx1 (Tens (Base j e1 q) ctx3)))))
+    
