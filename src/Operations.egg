@@ -1,29 +1,83 @@
-;; add, R (x) R -> R
-; (rule ((= e (Base (Add a b) p))
-;        (= q (+ p 1.0)))
-;     ((<- e (Base (Vars a b) q))))
+;; add, a x b -> (a + b)
+(rule ((= e (Base 0.0 (Add a b) p))
+       (= q (+ p 1.0)))
+    ((<- e (Base 0.0 (Vars a b) q))))
 
-;; dependent add, R (x)_i (R x R) -> R (x)_i R
-; (rule ((= e (Star ob1 i ob2))
-;        (= ob2 (Base (Add a b) p))
-;        (= q (+ p 1.0)))
-;     ((<- e (Star ob1 i (Star (Base a q) 0.0 (Base b q))))))
+;; dependent add, a * (b x c) -> a * (b + c)
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Add e2 e3) q))
+       (= r (+ q 1.0)))
+    ((<- e (Star ctx1 (Base i (Vars e2 e3) r)))))
 
-;; mul, R (x) R -> R
-; (rule ((= e (Base (Mul a b) p))
-;        (= q (* (+ p 1.0) 0.5)))
-;     ((<- e (Base (Vars a b) q))))
+;; add with siblings, a * ((b x c) (x) d) -> a * ((b + c) (x) d)
+(rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Add e2 e3) q))
+       (= r (+ q 1.0)))
+    ((<- e (Star ctx1 (Tens (Base i (Vars e2 e3) r) ctx3)))))
 
-;; dmul, R (x)_j R -> R (x)_i R
-; (rule ((= e (Star ob1 i ob2))
-;        (= ob1 (Base a p1))
-;        (= ob2 (Base (Mul a b) p2))
-;        (>= i 1.0)
-;        (= j (- i 1.0))
-;        (= q (+ p2 1.0)))
-;     ((<- e (Star ob1 j (Base b q)))))
+;; mul, a x b -> ab
+(rule ((= e (Base 0.0 (Add a b) p))
+       (= q (* (+ p 1.0) 0.5)))
+    ((<- e (Base 0.0 (Vars a b) q))))
 
-;; square root, R -> R
-; (rule ((= e (Base (Sqrt a) p))
-;        (= q (+ (* p 2.0) 2.0)))
-;     ((<- e (Base a q))))
+;; dependent mul, a * (b x c) -> a * bc
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Add e2 e3) q))
+       (= r (* (+ q 1.0) 0.5)))
+    ((<- e (Star ctx1 (Base i (Vars e2 e3) r)))))
+
+;; mul with siblings, a * ((b x c) (x) d) -> a * (bc (x) d)
+(rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Add e2 e3) q))
+       (= r (* (+ q 1.0) 0.5)))
+    ((<- e (Star ctx1 (Tens (Base i (Vars e2 e3) r) ctx3)))))
+
+;; dmul, a (x) b -> a * ab
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base 1.0 (Mul e1 e2) q))
+       (= r (+ q 1.0)))
+    ((<- e (Tens ctx1 (Base 0.0 e2 r)))))
+
+;; dmul, a * b -> a * ab
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Mul e1 e2) q))
+       (> i 1.0)
+       (= j (- i 1.0))
+       (= r (+ q 1.0)))
+    ((<- e (Star ctx1 (Base j e2 r)))))
+
+;; dmul with siblings, a * (b (x) c) -> a * (ab (x) c)
+(rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Mul e1 e2) q))
+       (>= i 1.0)
+       (= j (- i 1.0))
+       (= r (+ q 1.0)))
+    ((<- e (Star ctx1 (Tens (Base j e2 r) ctx3)))))
+
+;; sqrt, a -> √a
+(rule ((= e (Base 0.0 (Sqrt e1) p))
+       (= q (+ (* p 2.0) 2.0)))
+    ((<- e (Base 0.0 e1 q))))
+
+;; dependent sqrt, a * b -> a * √b
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Sqrt e2) q))
+       (= j (* i 0.5))
+       (= r (+ (* q 2.0) 2.0)))
+    ((<- e (Star ctx1 (Base j e2 r)))))
+
+;; sqrt with siblings, a * (b (x) c) -> a * (√b (x) c)
+(rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Sqrt e2) q))
+       (= j (* i 0.5))
+       (= r (+ (* q 2.0) 2.0)))
+    ((<- e (Star ctx1 (Tens (Base j e2 r) ctx3)))))

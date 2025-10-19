@@ -6,9 +6,19 @@
     (Sqrt Expr)) ;; square root    
 
 (datatype Ctx
-    (Base f64 Expr f64) ;; error pushed from star parent, expression, (R^n, R, p)
-    (Tens Ctx Ctx) ;; X (x) Y
-    (Star Ctx Ctx)) ;; X *i,j (Y (x) Z)
+    ;; an object (R^n, R, p)
+    ;; arg1 is the error pushed from star parent. 
+    ;; if no star parent then should be 0.0
+    ;; arg2 is the expression it represents
+    ;; arg3 is the error bound, p
+    (Base f64 Expr f64) 
+    ;; tensoring two objects
+    (Tens Ctx Ctx)
+    ;; the star of two objects.
+    ;; the left (parent) should be a Base object
+    ;; the right is the tensor of Base objects, each with
+    ;; their own pushed error
+    (Star Ctx Ctx)) 
 
 ;; tensor associativity
 (birewrite (Tens (Tens a b) c)
@@ -20,6 +30,8 @@
 
 ;; morphism relation
 (relation <- (Ctx Ctx))
+
+;; transitivity
 (rule ((<- a b) (<- b c))
     ((<- a c)))
 

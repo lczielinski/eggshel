@@ -1,4 +1,6 @@
-
+;; projection a * ab -> ab
+(rule ((= e (Base 0.0 (Mul e1 e2) p)))
+    ((<- e (Star (Base 0.0 e1 0.0) (Base 1.0 (Mul e1 e2) p)))))
 
 ;; (R (x)_i X) (x) R -> R (x)_i (X (x) R)
 ; (rule ((= e (Star ob1 i (Star ob2 0.0 ob3)))
