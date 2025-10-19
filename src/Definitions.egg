@@ -1,0 +1,29 @@
+(datatype Expr
+    (Var String) ;; variable
+    (Vars Expr Expr) ;; shared variables
+    (Add Expr Expr) ;; add
+    (Mul Expr Expr) ;; mul
+    (Sqrt Expr)) ;; square root    
+
+(datatype Ctx
+    (Base f64 Expr f64) ;; error pushed from star parent, expression, (R^n, R, p)
+    (Tens Ctx Ctx) ;; X (x) Y
+    (Star Ctx Ctx)) ;; X *i,j (Y (x) Z)
+
+;; tensor associativity
+(birewrite (Tens (Tens a b) c)
+    (Tens a (Tens b c)))
+
+;; tensor symmetry
+(rewrite (Tens a b)
+    (Tens b a))
+
+;; morphism relation
+(relation <- (Ctx Ctx))
+(rule ((<- a b) (<- b c))
+    ((<- a c)))
+
+;; tensor congruence
+(rule ((<- b c) (= e (Tens a b)))
+    ((<- e (Tens a c))))
+

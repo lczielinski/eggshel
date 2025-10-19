@@ -1,0 +1,39 @@
+;; decombiner
+(rule ((= e (Base 0.0 (Vars e1 e2) p)))
+    ((<- e (Tens (Base 0.0 e1 p) (Base 0.0 e2 p)))))
+
+;; decombiner, under star
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Vars e2 e3) q)))
+    ((<- e (Star ctx1 (Tens (Base i e2 q) (Base i e3 q))))))
+
+;; decombiner, with siblings
+(rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Vars e2 e3) q)))
+    ((<- e (Star ctx1 (Tens (Tens (Base i e2 q) (Base i e3 q)) ctx3)))))
+
+;; decombiner, push 1
+(rule ((= e (Base 0.0 (Vars e1 e2) p)))
+    ((<- e (Star (Base 0.0 e1 p) (Base 1.0 e2 0.0)))))
+
+;; decombiner, push 2
+(rule ((= e (Base 0.0 (Vars e1 e2) p)))
+    ((<- e (Star (Base 0.0 e1 p) (Base 2.0 e2 p)))))
+
+;; duplicator
+(rule ((= e (Base 0.0 (Vars e1 e1) p)))
+    ((<- e (Base 0.0 e1 p))))
+
+;; duplicator, under star
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Vars e2 e2) q)))
+    ((<- e (Star ctx1 (Base i e2 q)))))
+
+;; duplicator, with siblings
+(rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+       (= ctx1 (Base 0.0 e1 p))
+       (= ctx2 (Base i (Vars e2 e2) q)))
+    ((<- e (Star ctx1 (Tens (Base i e2 q) ctx3)))))

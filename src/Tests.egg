@@ -1,0 +1,28 @@
+(let ex1 (Star (Base 0.0 (Var "a") 0.0) (Tens (Base 1.0 (Vars (Var "b") (Var "c")) 0.0) (Base 2.0 (Var "d") 0.0))))
+(let ex2 (Star (Base 0.0 (Var "a") 0.0) (Tens (Base 1.0 (Var "b") 0.0) (Tens (Base 1.0 (Var "c") 0.0) (Base 2.0 (Var "d") 0.0)))))
+
+(run-schedule (saturate (run)))
+(check (<- ex1 ex2))
+
+; (let _a2 (Base (Var "a") 2.0))
+; (let _b2 (Base (Var "b") 2.0))
+; (let _c (Base (Var "c") 2.0))
+; (let _d (Base (Var "d") 2.0))
+; (let _e (Base (Var "e") 1.0))
+; (let _f (Base (Var "f") 2.0))
+; (let _ed (Base (Mul (Var "e") (Var "d")) 1.0))
+
+; (let ex1 (Star (Base (Var "a") 1.0) 0.0 (Star (Base (Var "b") 2.0) 0.0 (Star (Base (Var "c") 1.0) 0.0 (Star (Base (Var "d") 2.0) 0.0 (Star (Base (Var "e") 1.0) 0.0 (Star (Base (Var "f") 2.0) 0.0 (Base (Var "g") 3.0))))))))
+
+; ;; d_2 (x) e_1 (x) f_2
+; (let ex5 (Star (Star _d 0.0 _e) 0.0 _f))
+; ;; (e_1 (x)_1 (e * d)_1) (x) f_2
+; (let ex6 (Star (Star _e 1.0 _ed) 0.0 _f))
+; ;; e_1 (x)_1 ((e * d)_1 (x) f_1)
+; (let ex7 (Star _e 1.0 (Star _ed 0.0 (Base (Var "f") 1.0))))
+; ;; d + ((e * d) + f)
+; (let ex8 (Base (Add (Var "e") (Add (Mul (Var "e") (Var "d")) (Var "f"))) 0.0))
+
+
+; (check (<- ex6 ex5))
+; (check (<- ex8 ex5))

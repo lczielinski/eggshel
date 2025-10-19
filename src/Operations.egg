@@ -1,0 +1,29 @@
+;; add, R (x) R -> R
+; (rule ((= e (Base (Add a b) p))
+;        (= q (+ p 1.0)))
+;     ((<- e (Base (Vars a b) q))))
+
+;; dependent add, R (x)_i (R x R) -> R (x)_i R
+; (rule ((= e (Star ob1 i ob2))
+;        (= ob2 (Base (Add a b) p))
+;        (= q (+ p 1.0)))
+;     ((<- e (Star ob1 i (Star (Base a q) 0.0 (Base b q))))))
+
+;; mul, R (x) R -> R
+; (rule ((= e (Base (Mul a b) p))
+;        (= q (* (+ p 1.0) 0.5)))
+;     ((<- e (Base (Vars a b) q))))
+
+;; dmul, R (x)_j R -> R (x)_i R
+; (rule ((= e (Star ob1 i ob2))
+;        (= ob1 (Base a p1))
+;        (= ob2 (Base (Mul a b) p2))
+;        (>= i 1.0)
+;        (= j (- i 1.0))
+;        (= q (+ p2 1.0)))
+;     ((<- e (Star ob1 j (Base b q)))))
+
+;; square root, R -> R
+; (rule ((= e (Base (Sqrt a) p))
+;        (= q (+ (* p 2.0) 2.0)))
+;     ((<- e (Base a q))))
