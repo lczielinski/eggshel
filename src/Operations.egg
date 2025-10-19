@@ -18,21 +18,21 @@
     ((<- e (Star ctx1 (Tens (Base i (Vars e2 e3) r) ctx3)))))
 
 ;; mul, a x b -> ab
-(rule ((= e (Base 0.0 (Add a b) p))
+(rule ((= e (Base 0.0 (Mul a b) p))
        (= q (* (+ p 1.0) 0.5)))
     ((<- e (Base 0.0 (Vars a b) q))))
 
 ;; dependent mul, a * (b x c) -> a * bc
 (rule ((= e (Star ctx1 ctx2))
        (= ctx1 (Base 0.0 e1 p))
-       (= ctx2 (Base i (Add e2 e3) q))
+       (= ctx2 (Base i (Mul e2 e3) q))
        (= r (* (+ q 1.0) 0.5)))
     ((<- e (Star ctx1 (Base i (Vars e2 e3) r)))))
 
 ;; mul with siblings, a * ((b x c) (x) d) -> a * (bc (x) d)
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
        (= ctx1 (Base 0.0 e1 p))
-       (= ctx2 (Base i (Add e2 e3) q))
+       (= ctx2 (Base i (Mul e2 e3) q))
        (= r (* (+ q 1.0) 0.5)))
     ((<- e (Star ctx1 (Tens (Base i (Vars e2 e3) r) ctx3)))))
 
