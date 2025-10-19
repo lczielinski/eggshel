@@ -70,7 +70,7 @@
 (rule ((= e (Star ctx1 ctx2))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Sqrt e2) q))
-       (= j (* i 0.5))
+       (= j (* i 2.0))
        (= r (+ (* q 2.0) 2.0)))
     ((<- e (Star ctx1 (Base j e2 r)))))
 
@@ -78,6 +78,6 @@
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Sqrt e2) q))
-       (= j (* i 0.5))
+       (= j (* i 2.0))
        (= r (+ (* q 2.0) 2.0)))
     ((<- e (Star ctx1 (Tens (Base j e2 r) ctx3)))))
