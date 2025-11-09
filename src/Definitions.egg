@@ -38,13 +38,13 @@
     (Tens b a))
 
 ;; morphism relation
-(relation <- (Ctx Ctx))
+(relation -> (Ctx Ctx))
 
 ;; transitivity
-(rule ((<- a b) (<- b c))
-    ((<- a c)))
+(rule ((-> a b) (-> b c))
+    ((-> a c)))
 
 ;; tensor congruence
-(rule ((<- b c) (= e (Tens a b)))
-    ((<- e (Tens a c))))
+(rule ((-> b c) (= e (Tens a b)))
+    ((-> e (Tens a c))))
 

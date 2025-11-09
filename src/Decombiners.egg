@@ -1,44 +1,44 @@
 ;; decombiner, a (x) b -> a x b
 (rule ((= e (Base 0.0 (Vars e1 e2) p)))
-    ((<- e (Tens (Base 0.0 e1 p) (Base 0.0 e2 p)))))
+    ((-> (Tens (Base 0.0 e1 p) (Base 0.0 e2 p)) e)))
 
 ;; decombiner, under star, a * (b (x) c) -> a * (b x c)
 (rule ((= e (Star ctx1 ctx2))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Vars e2 e3) q)))
-    ((<- e (Star ctx1 (Tens (Base i e2 q) (Base i e3 q))))))
+    ((-> (Star ctx1 (Tens (Base i e2 q) (Base i e3 q))) e)))
 
 ;; decombiner, with siblings, a * (b (x) c (x) d) -> a * ((b x c) (x) d)
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Vars e2 e3) q)))
-    ((<- e (Star ctx1 (Tens (Tens (Base i e2 q) (Base i e3 q)) ctx3)))))
+    ((-> (Star ctx1 (Tens (Tens (Base i e2 q) (Base i e3 q)) ctx3)) e)))
 
 ;; decombiner, push 0.5, a * b -> a x b
 (rule ((= e (Base 0.0 (Vars e1 e2) p))
        (= q (* p 0.5)))
-    ((<- e (Star (Base 0.0 e1 p) (Base 0.5 e2 q)))))
+    ((-> (Star (Base 0.0 e1 p) (Base 0.5 e2 q)) e)))
 
 ;; decombiner, push 1, a * b -> a x b
 (rule ((= e (Base 0.0 (Vars e1 e2) p)))
-    ((<- e (Star (Base 0.0 e1 p) (Base 1.0 e2 0.0)))))
+    ((-> (Star (Base 0.0 e1 p) (Base 1.0 e2 0.0)) e)))
 
 ;; decombiner, push 2, a * b -> a x b
 (rule ((= e (Base 0.0 (Vars e1 e2) p)))
-    ((<- e (Star (Base 0.0 e1 p) (Base 2.0 e2 p)))))
+    ((-> (Star (Base 0.0 e1 p) (Base 2.0 e2 p)) e)))
 
 ;; duplicator, a -> a x a
 (rule ((= e (Base 0.0 (Vars e1 e1) p)))
-    ((<- e (Base 0.0 e1 p))))
+    ((-> (Base 0.0 e1 p) e)))
 
 ;; duplicator, under star, a * b -> a * (b x b)
 (rule ((= e (Star ctx1 ctx2))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Vars e2 e2) q)))
-    ((<- e (Star ctx1 (Base i e2 q)))))
+    ((-> (Star ctx1 (Base i e2 q)) e)))
 
 ;; duplicator, with siblings, a * (b (x) c) -> a * ((b x b) (x) c)
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Vars e2 e2) q)))
-    ((<- e (Star ctx1 (Tens (Base i e2 q) ctx3)))))
+    ((-> (Star ctx1 (Tens (Base i e2 q) ctx3)) e)))

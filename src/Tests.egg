@@ -45,9 +45,21 @@
 (let _ex5 (Base 0.0 (Add _a (Sqrt (Mul _a _b))) 0.0))
 (let _ctx5 (Tens _a1 _b4))
 
+(let _ex6 (Base 0.0 (Sqrt (Add (Var "a") (Var "b"))) 0.0))
+(let _ctx6 (Base 0.0 (Add (Var "a") (Var "b")) 2.0))
+
+(let _ex7 (Base 0.0 (Add _a (Mul _a _b)) 0.0))
+(let _ctx7 (Tens _a1 _b1))
+
+(let _ex8 (Base 0.0 (Add _a (Mul _a (Mul _a _b))) 0.0))
+(let _ctx8 (Tens _a1 _b3))
+
 (run-schedule (saturate (run)))
-(check (<- _ex1 _ctx1))
-(check (<- _ex2 _ctx2))
-(check (<- _ex3 _ctx3))
-(check (<- _ex4 _ctx4))
-(check (<- _ex5 _ctx5))
+(check (-> _ctx1 _ex1))
+(check (-> _ctx2 _ex2))
+(check (-> _ctx3 _ex3))
+(check (-> _ctx4 _ex4))
+(check (-> _ctx5 _ex5))
+(check (-> _ctx6 _ex6))
+(check (-> _ctx7 _ex7))
+(check (-> _ctx8 _ex8))
