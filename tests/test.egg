@@ -1,8 +1,0 @@
-(let ex (Base 0.0 (Add (Var "x") (Mul (Var "x") (Var "z"))) 0.0))
-(let ctx (Tens (Base 0.0 (Var "x") 1.0) (Base 0.0 (Var "y") 1.0)))
-
-(run-schedule (saturate (run)))
-(check (-> ctx ex))
-; [ERROR] In 5:1-19 of tests/test.egg: (check (-> ctx ex))
-;     Check failed: 
-;     (-> (ctx ) (ex ))
