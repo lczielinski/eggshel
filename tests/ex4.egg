@@ -1,4 +1,4 @@
-(let ex (Base 0.0 (Add (Var "a") (Add (Var "b") (Mul (Var "c") (Add (Var "d") (Var "e"))))) 0.0))
+(let ex (Base 0.0 (Add (Add (Mul (Add (Var "d") (Var "e")) (Var "c")) (Var "b")) (Var "a")) 0.0))
 (let ctx (Tens (Base 0.0 (Var "a") 1.0) (Tens (Base 0.0 (Var "b") 2.0) (Tens (Base 0.0 (Var "c") 1.5) (Tens (Base 0.0 (Var "d") 2.5) (Base 0.0 (Var "e") 2.5))))))
 
 (run-schedule (saturate (run)))
@@ -6,4 +6,4 @@
 
 ; [INFO ] Checked fact [Fact(Call(In 5:8-18 of tests/ex4.egg: (-> ctx ex), Func(FuncType { name: "->", subtype: Relation, input: [EqSort { name: "Ctx" }, EqSort { name: "Ctx" }], output: UnitSort }), [Call(In 5:12-14 of tests/ex4.egg: ctx, Func(FuncType { name: "ctx", subtype: Custom, input: [], output: EqSort { name: "Ctx" } }), []), Call(In 5:16-17 of tests/ex4.egg: ex, Func(FuncType { name: "ex", subtype: Custom, input: [], output: EqSort { name: "Ctx" } }), [])]))].
 
-; Took 0.03558904200326651 seconds
+; Took 0.04085733299871208 seconds

@@ -8,11 +8,11 @@
 (rewrite (Vars e1 e2)
     (Vars e2 e1))
 
-(rewrite (Add e1 e2)
-    (Add e2 e1))
+; (rewrite (Add e1 e2)
+;     (Add e2 e1))
 
-(rewrite (Mul e1 e2)
-    (Mul e2 e1))
+; (rewrite (Mul e1 e2)
+;     (Mul e2 e1))
 
 (datatype Ctx
     ;; an object (R^n, R, p)

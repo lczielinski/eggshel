@@ -29,7 +29,29 @@ def generate_expr(s):
         elif isinstance(expr, list):
             return [replace_vars(item) for item in expr]
         return expr
-    
+
+    def expr_key(expr):
+        """Generate a sort key for canonicalization"""
+        if isinstance(expr, str):
+            return expr
+        elif isinstance(expr, list):
+            return "(" + " ".join(expr_key(item) for item in expr) + ")"
+        return str(expr)
+
+    def canonicalize(expr):
+        """Sort arguments of commutative ops (Add, Mul) lexicographically"""
+        if isinstance(expr, str):
+            return expr
+        elif isinstance(expr, list):
+            # First canonicalize children
+            expr = [canonicalize(item) for item in expr]
+            # Then sort if commutative op
+            if len(expr) == 3 and expr[0] in ["Add", "Mul"]:
+                if expr_key(expr[1]) > expr_key(expr[2]):
+                    expr = [expr[0], expr[2], expr[1]]
+            return expr
+        return expr
+
     def to_string(expr):
         if isinstance(expr, str):
             return expr
@@ -40,7 +62,8 @@ def generate_expr(s):
     tokens = tokenize(s)
     parsed = parse(tokens)
     replaced = replace_vars(parsed)
-    return "(let ex (Base 0.0 " + to_string(replaced) + " 0.0))"
+    canonical = canonicalize(replaced)
+    return "(let ex (Base 0.0 " + to_string(canonical) + " 0.0))"
 
 # given a string x2 y3 z2
 # generates (let ctx (Tens (Tens (Base 0.0 (Var "x") 2.0) (Base 0.0 (Var "y") 3.0)) (Base 0.0 (Var "z") 2.0)))

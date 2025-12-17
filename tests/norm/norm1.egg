@@ -1,0 +1,22 @@
+(let ex (Base 0.0 (Sqrt (Mul (Var "x") (Var "x"))) 0.0))
+
+(rule ((Base 0.0 (Var "x") x_p))
+      ((Base 0.0 (Var "x") x_p)))
+
+(run-schedule (saturate (run)))
+
+(relation bounds (String f64))
+
+(rule ((-> (Base 0.0 (Var "x") ?x_p) ex))
+      ((bounds "x" ?x_p)))
+
+(run 1)
+
+(print-function bounds 10)
+
+; (
+;    (bounds "x" 1.5)
+; )
+
+
+; Took 0.03229229198768735 seconds

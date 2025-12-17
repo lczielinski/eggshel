@@ -1,6 +1,8 @@
 ;; projection a * ab -> ab
 (rule ((= e (Base 0.0 (Mul e1 e2) p)))
     ((-> (Star (Base 0.0 e1 0.0) (Base 1.0 (Mul e1 e2) p)) e)))
+; (rule ((= e (Base 0.0 (Mul e1 e2) p)))
+;     ((-> (Star (Base 0.0 e2 0.0) (Base 1.0 (Mul e1 e2) p)) e)))
 
 ;; (a * b) (x) c -> a * c (x) c)
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))

@@ -36,14 +36,19 @@
        (= r (* (+ q 1.0) 0.5)))
     ((-> (Star ctx1 (Tens (Base i (Vars e2 e3) r) ctx3)) e)))
 
-;; dmul, a (x) b -> a * ab
+;; dmul, a (x) b -> a * ab (both orderings for Mul)
 (rule ((= e (Star ctx1 ctx2))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base 1.0 (Mul e1 e2) q))
        (= r (+ q 1.0)))
     ((-> (Tens ctx1 (Base 0.0 e2 r)) e)))
+; (rule ((= e (Star ctx1 ctx2))
+;        (= ctx1 (Base 0.0 e1 p))
+;        (= ctx2 (Base 1.0 (Mul e2 e1) q))
+;        (= r (+ q 1.0)))
+;     ((-> (Tens ctx1 (Base 0.0 e2 r)) e)))
 
-;; dmul, a * b -> a * ab
+;; dmul, a * b -> a * ab (both orderings for Mul)
 (rule ((= e (Star ctx1 ctx2))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Mul e1 e2) q))
@@ -51,8 +56,15 @@
        (= j (- i 1.0))
        (= r (+ q 1.0)))
     ((-> (Star ctx1 (Base j e2 r)) e)))
+; (rule ((= e (Star ctx1 ctx2))
+;        (= ctx1 (Base 0.0 e1 p))
+;        (= ctx2 (Base i (Mul e2 e1) q))
+;        (> i 1.0)
+;        (= j (- i 1.0))
+;        (= r (+ q 1.0)))
+;     ((-> (Star ctx1 (Base j e2 r)) e)))
 
-;; dmul with siblings, a * (b (x) c) -> a * (ab (x) c)
+;; dmul with siblings, a * (b (x) c) -> a * (ab (x) c) (both orderings for Mul)
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Mul e1 e2) q))
@@ -60,6 +72,13 @@
        (= j (- i 1.0))
        (= r (+ q 1.0)))
     ((-> (Star ctx1 (Tens (Base j e2 r) ctx3)) e)))
+; (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
+;        (= ctx1 (Base 0.0 e1 p))
+;        (= ctx2 (Base i (Mul e2 e1) q))
+;        (>= i 1.0)
+;        (= j (- i 1.0))
+;        (= r (+ q 1.0)))
+;     ((-> (Star ctx1 (Tens (Base j e2 r) ctx3)) e)))
 
 ;; sqrt, a -> √a
 (rule ((= e (Base 0.0 (Sqrt e1) p))

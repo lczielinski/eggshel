@@ -1,0 +1,22 @@
+(let ex (Base 0.0 (Sqrt (Add (Mul (Var "x") (Var "x")) (Mul (Var "y") (Var "y")))) 0.0))
+
+(rule ((Base 0.0 (Var "x") x_p) (Base 0.0 (Var "y") y_p))
+      ((Tens (Base 0.0 (Var "x") x_p) (Base 0.0 (Var "y") y_p))))
+
+(run-schedule (saturate (run)))
+
+(relation bounds (String f64 String f64))
+
+(rule ((-> (Tens (Base 0.0 (Var "x") ?x_p) (Base 0.0 (Var "y") ?y_p)) ex))
+      ((bounds "x" ?x_p "y" ?y_p)))
+
+(run 1)
+
+(print-function bounds 10)
+
+; (
+;    (bounds "x" 2.0 "y" 2.0)
+; )
+
+
+; Took 0.031090207980014384 seconds

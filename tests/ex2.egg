@@ -6,4 +6,4 @@
 
 ; [INFO ] Checked fact [Fact(Call(In 5:8-18 of tests/ex2.egg: (-> ctx ex), Func(FuncType { name: "->", subtype: Relation, input: [EqSort { name: "Ctx" }, EqSort { name: "Ctx" }], output: UnitSort }), [Call(In 5:12-14 of tests/ex2.egg: ctx, Func(FuncType { name: "ctx", subtype: Custom, input: [], output: EqSort { name: "Ctx" } }), []), Call(In 5:16-17 of tests/ex2.egg: ex, Func(FuncType { name: "ex", subtype: Custom, input: [], output: EqSort { name: "Ctx" } }), [])]))].
 
-; Took 0.02881091702147387 seconds
+; Took 0.03187912500288803 seconds

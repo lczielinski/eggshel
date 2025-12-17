@@ -1,0 +1,19 @@
+(let ex (Base 0.0 (Sqrt (Add (Mul (Var "x") (Var "x")) (Add (Mul (Var "y") (Var "y")) (Add (Mul (Var "z") (Var "z")) (Add (Mul (Var "a") (Var "a")) (Mul (Var "b") (Var "b"))))))) 0.0))
+
+(rule ((Base 0.0 (Var "x") x_p) (Base 0.0 (Var "y") y_p) (Base 0.0 (Var "z") z_p) (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))
+      ((Tens (Base 0.0 (Var "x") x_p) (Tens (Base 0.0 (Var "y") y_p) (Tens (Base 0.0 (Var "z") z_p) (Tens (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p)))))))
+
+(run-schedule (saturate (run)))
+
+(relation bounds (String f64 String f64 String f64 String f64 String f64))
+
+(rule ((-> (Tens (Base 0.0 (Var "x") ?x_p) (Tens (Base 0.0 (Var "y") ?y_p) (Tens (Base 0.0 (Var "z") ?z_p) (Tens (Base 0.0 (Var "a") ?a_p) (Base 0.0 (Var "b") ?b_p))))) ex))
+      ((bounds "x" ?x_p "y" ?y_p "z" ?z_p "a" ?a_p "b" ?b_p)))
+
+(run 1)
+
+(print-function bounds 10)
+
+; [INFO ]    (bounds "x" 2.0 "y" 2.5 "z" 3.0 "a" 3.5 "b" 3.5)
+
+; Took 1.406983290973585 seconds
