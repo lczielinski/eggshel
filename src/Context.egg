@@ -4,7 +4,7 @@
 ; (rule ((= e (Base 0.0 (Mul e1 e2) p)))
 ;     ((-> (Star (Base 0.0 e2 0.0) (Base 1.0 (Mul e1 e2) p)) e)))
 
-;; (a * b) (x) c -> a * c (x) c)
+;; (a * b) (x) c -> a * (b (x) c)
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
        (= ctx3 (Base 0.0 e1 p)))
     ((-> (Tens (Star ctx1 ctx2) ctx3) e)))
@@ -14,8 +14,8 @@
        (= ctx2 (Base i e1 p))
        (< i 2.0)
        (= j (+ i 1.0))
-       (>= 1.0 p)
-       (= q (- p 1.0)))
+    ;    (>= p 1.0)
+       (= q (+ p 1.0)))
     ((-> (Star ctx1 (Base j e1 q)) e)))
 
 ;; push adjuster with sibling
@@ -23,7 +23,7 @@
        (= ctx2 (Base i e1 p))
        (< i 2.0)
        (= j (+ i 1.0))
-       (>= 1.0 p)
+    ;    (>= p 1.0)
        (= q (+ p 1.0)))
     ((-> (Star ctx1 (Tens (Base j e1 q) ctx3)) e)))
     

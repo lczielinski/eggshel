@@ -1,9 +1,22 @@
-(let ex (Base 0.0 (Add (Add (Mul (Mul (Var "a") (Var "c")) (Var "a")) (Mul (Var "a") (Var "b"))) (Var "a")) 0.0))
-(let ctx (Tens (Base 0.0 (Var "a") 1.0) (Tens (Base 0.0 (Var "b") 2.0) (Base 0.0 (Var "c") 4.0))))
+(let ex (Base 0.0 (Mul (Add (Var "a") (Var "b")) (Add (Var "b") (Var "a"))) 0.0))
+
+(rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))
+      ((Tens (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))))
 
 (run-schedule (saturate (run)))
-(check (-> ctx ex))
 
-; [INFO ] Checked fact [Fact(Call(In 5:8-18 of tests/ex3.egg: (-> ctx ex), Func(FuncType { name: "->", subtype: Relation, input: [EqSort { name: "Ctx" }, EqSort { name: "Ctx" }], output: UnitSort }), [Call(In 5:12-14 of tests/ex3.egg: ctx, Func(FuncType { name: "ctx", subtype: Custom, input: [], output: EqSort { name: "Ctx" } }), []), Call(In 5:16-17 of tests/ex3.egg: ex, Func(FuncType { name: "ex", subtype: Custom, input: [], output: EqSort { name: "Ctx" } }), [])]))].
+(relation bounds (String f64 String f64))
 
-; Took 0.1133644590008771 seconds
+(rule ((-> (Tens (Base 0.0 (Var "a") ?a_p) (Base 0.0 (Var "b") ?b_p)) ex))
+      ((bounds "a" ?a_p "b" ?b_p)))
+
+(run 1)
+
+(print-function bounds 10)
+
+; (
+;    (bounds "a" 1.5 "b" 1.5)
+; )
+
+
+; Took 0.026584499995806254 seconds

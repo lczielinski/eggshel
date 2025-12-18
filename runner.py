@@ -29,29 +29,7 @@ def generate_expr(s):
         elif isinstance(expr, list):
             return [replace_vars(item) for item in expr]
         return expr
-
-    def expr_key(expr):
-        """Generate a sort key for canonicalization"""
-        if isinstance(expr, str):
-            return expr
-        elif isinstance(expr, list):
-            return "(" + " ".join(expr_key(item) for item in expr) + ")"
-        return str(expr)
-
-    def canonicalize(expr):
-        """Sort arguments of commutative ops (Add, Mul) lexicographically"""
-        if isinstance(expr, str):
-            return expr
-        elif isinstance(expr, list):
-            # First canonicalize children
-            expr = [canonicalize(item) for item in expr]
-            # Then sort if commutative op
-            if len(expr) == 3 and expr[0] in ["Add", "Mul"]:
-                if expr_key(expr[1]) > expr_key(expr[2]):
-                    expr = [expr[0], expr[2], expr[1]]
-            return expr
-        return expr
-
+    
     def to_string(expr):
         if isinstance(expr, str):
             return expr
@@ -62,36 +40,48 @@ def generate_expr(s):
     tokens = tokenize(s)
     parsed = parse(tokens)
     replaced = replace_vars(parsed)
-    canonical = canonicalize(replaced)
-    return "(let ex (Base 0.0 " + to_string(canonical) + " 0.0))"
+    return "(let ex (Base 0.0 " + to_string(replaced) + " 0.0))"
 
-# given a string x2 y3 z2
-# generates (let ctx (Tens (Tens (Base 0.0 (Var "x") 2.0) (Base 0.0 (Var "y") 3.0)) (Base 0.0 (Var "z") 2.0)))
+# given a string x y z
+# generates (let ctx (Tens (Tens (Base 0.0 (Var "x") x_p) (Base 0.0 (Var "y") y_p)) (Base 0.0 (Var "z") z_p)))
 def generate_ctx(s):
-    parts = s.strip().split()
-    pairs = [(part[0], part[1:]) for part in parts]
-
-    err = pairs[-1][1] if "." in pairs[-1][1] else pairs[-1][1] + ".0"
-    result = f"(Base 0.0 (Var \"{pairs[-1][0]}\") {err})"
+    parts = s.split()
+    result = f"(Base 0.0 (Var \"{parts[-1]}\") ?{parts[-1]}_p)"
     
-    for i in range(len(pairs) - 2, -1, -1):
-        var, exp = pairs[i]
-        err = exp if "." in exp else exp + ".0"
-        base = f"(Base 0.0 (Var \"{var}\") {err})"
+    for i in range(len(parts) - 2, -1, -1):
+        base = f"(Base 0.0 (Var \"{parts[i]}\") ?{parts[i]}_p)"
         result = f"(Tens {base} {result})"
     
-    return f"(let ctx {result})"
+    return result
+
+def generate_rule(var_names):
+    conditions = " ".join(f"(Base 0.0 (Var \"{var}\") {var}_p)" for var in var_names)
+    
+    tens_expr = f"(Base 0.0 (Var \"{var_names[-1]}\") {var_names[-1]}_p)"
+    for i in range(len(var_names) - 2, -1, -1):
+        base = f"(Base 0.0 (Var \"{var_names[i]}\") {var_names[i]}_p)"
+        tens_expr = f"(Tens {base} {tens_expr})"
+    return f"(rule ({conditions})\n      ({tens_expr}))"
 
 def run(test_name, expr, ctx):
+    var_names = ctx.split()
     expr = generate_expr(expr)
     ctx = generate_ctx(ctx)
 
+    rule = generate_rule(var_names)
+    bounds_type = " ".join(["String f64"] * len(var_names))
+    bounds_query = " ".join(f"\"{var}\" ?{var}_p" for var in var_names)
+
     file = "tests/" + test_name + ".egg"
     with open(file, "w") as f:
-        f.write(expr + "\n")
-        f.write(ctx + "\n\n")
-        f.write("(run-schedule (saturate (run)))\n")
-        f.write("(check (-> ctx ex))\n\n")
+        f.write(expr + "\n\n")
+        f.write(rule + "\n\n")
+        f.write("(run-schedule (saturate (run)))\n\n")
+        
+        f.write(f"(relation bounds ({bounds_type}))\n\n")
+        f.write(f"(rule ((-> {ctx} ex))\n      ((bounds {bounds_query})))\n\n")
+        f.write("(run 1)\n\n")
+        f.write("(print-function bounds 10)\n\n")
 
     src_names = ["Definitions", "Context", "Decombiners", "Operations"]
     src = " ".join(f"src/{name}.egg" for name in src_names)
@@ -102,17 +92,19 @@ def run(test_name, expr, ctx):
         start = time.perf_counter()
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
         end = time.perf_counter()
-        if result.stderr:
-            text = result.stderr
-            last_error = text.rfind("[ERROR]")
-            if last_error != -1:
-                print(test_name + " failed")
-            last_info = text.rfind("[INFO ]")
-            last_pos = max(last_error, last_info)
+        f.write(textwrap.indent(result.stdout, "; "))
+        # if result.stderr:
+        #     text = result.stderr
+            
+        #     last_error = text.rfind("[ERROR]")
+        #     if last_error != -1:
+        #         print(test_name + " failed")
+        #     last_info = text.rfind("[INFO ]")
+        #     last_pos = max(last_error, last_info)
 
-            if last_pos != -1:
-                text = text[last_pos:]
-            f.write(textwrap.indent(text, "; "))
+        #     if last_pos != -1:
+        #         text = text[last_pos:]
+        #     f.write(textwrap.indent(text, "; "))
         f.write(f"\n; Took {end - start} seconds")
 
 # if len(sys.argv) != 4:
@@ -123,9 +115,27 @@ def run(test_name, expr, ctx):
 # expr = generate_expr(sys.argv[2])
 # ctx = generate_ctx(sys.argv[3])
 
-run("ex1", "(Mul (Add a (Mul a b)) c)", "a1 c1 b1")
-run("ex2", "(Add (Mul a a) (Mul b b))", "a1 b1")
-run("ex3", "(Add (Add (Mul a b) (Mul (Mul a c) a)) a)", "a1 b2 c4")
-run("ex4", "(Add a (Add b (Mul c (Add d e))))", "a1 b2 c1.5 d2.5 e2.5")
-run("ex5", "(Add a (Sqrt (Mul a b)))", "a1 b4")
-run("ex6", "(Add a (Mul a (Mul a b)))", "a1 b3")
+# run("linear/linear2", "(Add x (Mul a x))", "x a")
+# run("linear/linear3", "(Add x (Add (Mul a x) (Mul b x)))", "x a b")
+run("linear/linear4", "(Add x (Add (Mul a x) (Add (Mul b x) (Mul c x)))))", "x a b c")
+# run("linear/linear5", "(Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Mul d x))))))", "x a b c d")
+# run("linear/linear6", "(Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Mul e x)))))))", "x a b c d e")
+
+# run("norm/norm1", "(Sqrt (Mul x x))", "x")
+# run("norm/norm2", "(Sqrt (Add (Mul x x) (Mul y y)))", "x y")
+# run("norm/norm3", "(Sqrt (Add (Mul x x) (Add (Mul y y) (Mul z z))))", "x y z")
+# run("norm/norm4", "(Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Mul a a)))))", "x y z a")
+# run("norm/norm5", "(Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Mul b b))))))", "x y z a b")
+# run("norm/norm6", "(Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Mul c c)))))))", "x y z a b c")
+# run("norm/norm7", "(Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Add (Mul c c) (Mul d d))))))))", "x y z a b c d")
+
+# run("quad/quad2", "(Add x (Mul x (Mul x a)))", "x a")
+# run("quad/quad3", "(Add x (Add (Mul x (Mul x a)) (Mul x (Mul x b))))", "x a b")
+# run("quad/quad4", "(Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Mul x (Mul x c)))))", "x a b c")
+
+run("ex1", "(Add x (Add (Mul a x) (Mul (Mul b x) x)))", "a b x")
+run("ex2", "(Add a (Sqrt (Mul a b)))", "a b")
+run("ex3", "(Mul (Add a b) (Add b a))", "a b")
+run("ex4", "(Mul (Add a (Mul a b)) (Add c (Mul c d)))", "a b c d")
+run("ex5", "(Add a (Mul a (Sqrt b)))", "a b")
+run("ex6", "(Sqrt (Add (Mul a x) (Sqrt b)))", "a x b")
