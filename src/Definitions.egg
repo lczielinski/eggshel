@@ -3,48 +3,39 @@
     (Vars Expr Expr) ;; shared variables
     (Add Expr Expr) ;; add
     (Mul Expr Expr) ;; mul
-    (Sqrt Expr)) ;; square root    
+    (Sqrt Expr)) ;; square root  
 
 (rewrite (Vars e1 e2)
     (Vars e2 e1))
-
 (rewrite (Add e1 e2)
     (Add e2 e1))
-
 (rewrite (Mul e1 e2)
-    (Mul e2 e1))
+    (Mul e2 e1))  
 
-(datatype Ctx
-    ;; an object (R^n, R, p)
-    ;; arg1 is the error pushed from star parent. 
-    ;; if no star parent then should be 0.0
-    ;; arg2 is the expression it represents
-    ;; arg3 is the error bound, p
-    (Base f64 Expr f64) 
-    ;; tensoring two objects
-    (Tens Ctx Ctx)
-    ;; the star of two objects.
-    ;; the left (parent) should be a Base object
-    ;; the right is the tensor of Base objects, each with
-    ;; their own pushed error
-    (Star Ctx Ctx)) 
+(datatype DepTy 
+    (Dep f64 Expr f64))
 
-;; tensor associativity
-(birewrite (Tens (Tens a b) c)
-    (Tens a (Tens b c)))
+(sort DepSet (Set DepTy))
 
-;; tensor symmetry
-(rewrite (Tens a b)
-    (Tens b a))
+(datatype ParTy
+    (Par Expr f64))
+
+(datatype StarTy
+    (Leaf ParTy)
+    (Star ParTy DepSet))
+
+(sort StarSet (Set StarTy))
+
+(datatype CtxTy
+    (Ctx StarSet))
 
 ;; morphism relation
-(relation -> (Ctx Ctx))
+(relation -> (CtxTy CtxTy))
 
 ;; transitivity
 (rule ((-> a b) (-> b c))
     ((-> a c)))
 
-;; tensor congruence
-(rule ((-> b c) (= e (Tens a b)))
-    ((-> e (Tens a c))))
-
+; (sort ISetBase (Set i64))
+; (check (= (set-of 1 2) (set-insert (set-of 1) 1)))
+; (check (= (set-of 1 2) (set-intersect (set-of 1 2) (set-of 1 2))))

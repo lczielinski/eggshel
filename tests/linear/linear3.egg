@@ -14,9 +14,6 @@
 
 (print-function bounds 10)
 
-; (
-;    (bounds "x" 1.0 "a" 2.0 "b" 2.0)
-; )
+; [INFO ]    (bounds "x" 1.0 "a" 2.0 "b" 2.0)
 
-
-; Took 0.08278904197504744 seconds
+; Took 0.07481416600057855 seconds

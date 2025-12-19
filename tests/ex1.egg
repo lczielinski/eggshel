@@ -1,22 +1,15 @@
-(let ex (Base 0.0 (Add (Var "x") (Add (Mul (Var "a") (Var "x")) (Mul (Mul (Var "b") (Var "x")) (Var "x")))) 0.0))
+(let _ex (Ctx (set-of (Leaf (Par (Add (Var "x") (Add (Mul (Var "a") (Var "x")) (Mul (Mul (Var "b") (Var "x")) (Var "x")))) 0.0)))))
 
-(rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "x") x_p))
-      ((Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "x") x_p)))))
-
-(run-schedule (saturate (run)))
+; (run-schedule (saturate (run)))
+(run 6)
+(query-extract (Ctx c))
 
 (relation bounds (String f64 String f64 String f64))
 
-(rule ((-> (Tens (Base 0.0 (Var "a") ?a_p) (Tens (Base 0.0 (Var "b") ?b_p) (Base 0.0 (Var "x") ?x_p))) ex))
+(rule ((-> (Ctx (set-of (Leaf (Par (Var "a") ?a_p)) (Leaf (Par (Var "b") ?b_p)) (Leaf (Par (Var "x") ?x_p)))) _ex))
       ((bounds "a" ?a_p "b" ?b_p "x" ?x_p)))
 
 (run 1)
 
 (print-function bounds 10)
 
-; (
-;    (bounds "a" 2.0 "b" 4.0 "x" 1.0)
-; )
-
-
-; Took 0.5967881670076167 seconds
