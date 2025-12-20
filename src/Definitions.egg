@@ -36,11 +36,7 @@
     (Tens b a))
 
 ;; morphism relation
-(relation -> (CtxTy CtxTy))
+(relation -> (Ctx Ctx))
 
-;; transitivity
-
-
-; (sort ISetBase (Set i64))
-; (check (= (set-of 1 2) (set-insert (set-of 1) 1)))
-; (check (= (set-of 1 2) (set-intersect (set-of 1 2) (set-of 1 2))))
+(rule ((-> b c) (= e (Tens a b)))
+    ((-> e (Tens a c))))
