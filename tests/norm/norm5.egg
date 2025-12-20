@@ -14,6 +14,3 @@
 
 (print-function bounds 10)
 
-; [INFO ]    (bounds "x" 2.0 "y" 2.5 "z" 3.0 "a" 3.5 "b" 3.5)
-
-; Took 1.406983290973585 seconds

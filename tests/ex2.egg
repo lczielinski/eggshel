@@ -1,29 +1,21 @@
-(let ex (Base 0.0 (Add (Var "a") (Sqrt (Mul (Var "a") (Var "b")))) 0.0))
-
-(rule ((-> b ex) (-> a b))
-    ((-> a ex)))
-
-(rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))
-      ((Tens (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))))
+(let _ex (Ctx (set-of (Leaf (Par (Add (Var "a") (Sqrt (Mul (Var "a") (Var "b")))) 0.0)))))
 
 (run-schedule (saturate (run)))
 
 (relation bounds (String f64 String f64))
 
-(ruleset get-bounds)
-
-(rule ((-> (Tens (Base 0.0 (Var "a") ?a_p) (Base 0.0 (Var "b") ?b_p)) ex))
-      ((bounds "a" ?a_p "b" ?b_p)) :ruleset get-bounds)
-
-(run-schedule (repeat 1 get-bounds))
+(rule ((-> (Ctx (set-of (Leaf (Par (Var "a") ?a_p)) (Leaf (Par (Var "b") ?b_p)))) _ex))
+      ((bounds "a" ?a_p "b" ?b_p)))
 
 ; (run 1)
 
 (print-function bounds 10)
+
+(query-extract (Ctx c))
 
 ; (
 ;    (bounds "a" 1.0 "b" 4.0)
 ; )
 
 
-; Took 0.030554000011761673 seconds
+; Took 0.09478670899989083 seconds

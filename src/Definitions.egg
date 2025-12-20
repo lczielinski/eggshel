@@ -3,14 +3,12 @@
     (Vars Expr Expr) ;; shared variables
     (Add Expr Expr) ;; add
     (Mul Expr Expr) ;; mul
-    (Sqrt Expr)) ;; square root    
+    (Sqrt Expr)) ;; square root  
 
 (rewrite (Vars e1 e2)
     (Vars e2 e1))
-
 (rewrite (Add e1 e2)
     (Add e2 e1))
-
 (rewrite (Mul e1 e2)
     (Mul e2 e1))
 
@@ -38,12 +36,11 @@
     (Tens b a))
 
 ;; morphism relation
-(relation -> (Ctx Ctx))
+(relation -> (CtxTy CtxTy))
 
 ;; transitivity
 
 
-;; tensor congruence
-(rule ((-> b c) (= e (Tens a b)))
-    ((-> e (Tens a c))))
-
+; (sort ISetBase (Set i64))
+; (check (= (set-of 1 2) (set-insert (set-of 1) 1)))
+; (check (= (set-of 1 2) (set-intersect (set-of 1 2) (set-of 1 2))))
