@@ -3,6 +3,9 @@
 (rule ((Base 0.0 (Var "x") x_p) (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "c") c_p))
       ((Tens (Base 0.0 (Var "x") x_p) (Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "c") c_p))))))
 
+(rule ((-> b ex) (-> a b))
+    ((-> a ex)))
+
 (run-schedule (saturate (run)))
 
 (relation bounds (String f64 String f64 String f64 String f64))

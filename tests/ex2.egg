@@ -7,7 +7,7 @@
 (rule ((-> (Ctx (set-of (Leaf (Par (Var "a") ?a_p)) (Leaf (Par (Var "b") ?b_p)))) _ex))
       ((bounds "a" ?a_p "b" ?b_p)))
 
-(run 1)
+; (run 1)
 
 (print-function bounds 10)
 

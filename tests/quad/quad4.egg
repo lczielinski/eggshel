@@ -1,5 +1,6 @@
 (let ex (Base 0.0 (Add (Var "x") (Add (Mul (Var "x") (Mul (Var "x") (Var "a"))) (Add (Mul (Var "x") (Mul (Var "x") (Var "b"))) (Mul (Var "x") (Mul (Var "x") (Var "c")))))) 0.0))
-
+(rule ((-> b ex) (-> a b))
+    ((-> a ex)))
 (rule ((Base 0.0 (Var "x") x_p) (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "c") c_p))
       ((Tens (Base 0.0 (Var "x") x_p) (Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "c") c_p))))))
 
