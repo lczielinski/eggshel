@@ -30,7 +30,7 @@
     (Star Ctx Ctx)) 
 
 ;; tensor associativity
-(birewrite (Tens (Tens a b) c)
+(rewrite (Tens (Tens a b) c)
     (Tens a (Tens b c)))
 
 ;; tensor symmetry
@@ -41,8 +41,7 @@
 (relation -> (Ctx Ctx))
 
 ;; transitivity
-(rule ((-> a b) (-> b c))
-    ((-> a c)))
+
 
 ;; tensor congruence
 (rule ((-> b c) (= e (Tens a b)))

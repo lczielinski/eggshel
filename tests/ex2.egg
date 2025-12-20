@@ -1,5 +1,8 @@
 (let ex (Base 0.0 (Add (Var "a") (Sqrt (Mul (Var "a") (Var "b")))) 0.0))
 
+(rule ((-> b ex) (-> a b))
+    ((-> a ex)))
+
 (rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))
       ((Tens (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))))
 
@@ -7,10 +10,14 @@
 
 (relation bounds (String f64 String f64))
 
-(rule ((-> (Tens (Base 0.0 (Var "a") ?a_p) (Base 0.0 (Var "b") ?b_p)) ex))
-      ((bounds "a" ?a_p "b" ?b_p)))
+(ruleset get-bounds)
 
-(run 1)
+(rule ((-> (Tens (Base 0.0 (Var "a") ?a_p) (Base 0.0 (Var "b") ?b_p)) ex))
+      ((bounds "a" ?a_p "b" ?b_p)) :ruleset get-bounds)
+
+(run-schedule (repeat 1 get-bounds))
+
+; (run 1)
 
 (print-function bounds 10)
 

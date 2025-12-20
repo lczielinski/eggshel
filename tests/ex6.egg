@@ -1,5 +1,6 @@
 (let ex (Base 0.0 (Sqrt (Add (Mul (Var "a") (Var "x")) (Sqrt (Var "b")))) 0.0))
-
+(rule ((-> b ex) (-> a b))
+    ((-> a ex)))
 (rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "x") x_p) (Base 0.0 (Var "b") b_p))
       ((Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "x") x_p) (Base 0.0 (Var "b") b_p)))))
 

@@ -3,14 +3,19 @@
 (rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "x") x_p))
       ((Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "x") x_p)))))
 
+(rule ((-> b ex) (-> a b))
+    ((-> a ex)))
+
 (run-schedule (saturate (run)))
 
 (relation bounds (String f64 String f64 String f64))
 
-(rule ((-> (Tens (Base 0.0 (Var "a") ?a_p) (Tens (Base 0.0 (Var "b") ?b_p) (Base 0.0 (Var "x") ?x_p))) ex))
-      ((bounds "a" ?a_p "b" ?b_p "x" ?x_p)))
+(ruleset get-bounds)
 
-(run 1)
+(rule ((-> (Tens (Base 0.0 (Var "a") ?a_p) (Tens (Base 0.0 (Var "b") ?b_p) (Base 0.0 (Var "x") ?x_p))) ex))
+      ((bounds "a" ?a_p "b" ?b_p "x" ?x_p)) :ruleset get-bounds)
+
+(run-schedule (repeat 1 get-bounds))
 
 (print-function bounds 10)
 
