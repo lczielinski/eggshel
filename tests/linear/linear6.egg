@@ -1,20 +1,26 @@
 (let ex (Base 0.0 (Add (Var "x") (Add (Mul (Var "a") (Var "x")) (Add (Mul (Var "b") (Var "x")) (Add (Mul (Var "c") (Var "x")) (Add (Mul (Var "d") (Var "x")) (Mul (Var "e") (Var "x"))))))) 0.0))
-(rule ((-> b ex) (-> a b))
-    ((-> a ex)))
+
 (rule ((Base 0.0 (Var "x") x_p) (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "c") c_p) (Base 0.0 (Var "d") d_p) (Base 0.0 (Var "e") e_p))
       ((Tens (Base 0.0 (Var "x") x_p) (Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Tens (Base 0.0 (Var "c") c_p) (Tens (Base 0.0 (Var "d") d_p) (Base 0.0 (Var "e") e_p))))))))
 
+(rule ((-> ctx2 ex) (-> ctx1 ctx2))
+      ((-> ctx1 ex)))
+
 (run-schedule (saturate (run)))
+
+(ruleset post)
 
 (relation bounds (String f64 String f64 String f64 String f64 String f64 String f64))
 
-(rule ((-> (Tens (Base 0.0 (Var "x") ?x_p) (Tens (Base 0.0 (Var "a") ?a_p) (Tens (Base 0.0 (Var "b") ?b_p) (Tens (Base 0.0 (Var "c") ?c_p) (Tens (Base 0.0 (Var "d") ?d_p) (Base 0.0 (Var "e") ?e_p)))))) ex))
-      ((bounds "x" ?x_p "a" ?a_p "b" ?b_p "c" ?c_p "d" ?d_p "e" ?e_p)))
+(rule ((-> (Tens (Base 0.0 (Var "x") x_p) (Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Tens (Base 0.0 (Var "c") c_p) (Tens (Base 0.0 (Var "d") d_p) (Base 0.0 (Var "e") e_p)))))) ex))
+      ((bounds "x" x_p "a" a_p "b" b_p "c" c_p "d" d_p "e" e_p)) :ruleset post)
 
-(run 1)
+(run post 1)
 
 (print-function bounds 10)
 
-; [INFO ]    (bounds "x" 1.0 "a" 2.0 "b" 3.0 "c" 4.0 "d" 5.0 "e" 5.0)
+; (
+;    (bounds "x" 1.0 "a" 2.0 "b" 3.0 "c" 4.0 "d" 5.0 "e" 5.0)
+; )
 
-; Took 140.52577524998924 seconds
+; Took 19.696992375014815 seconds

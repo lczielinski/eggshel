@@ -1,21 +1,26 @@
-(let _ex (Ctx (set-of (Leaf (Par (Add (Var "a") (Sqrt (Mul (Var "a") (Var "b")))) 0.0)))))
+(let ex (Base 0.0 (Add (Var "a") (Sqrt (Mul (Var "a") (Var "b")))) 0.0))
+
+(rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))
+      ((Tens (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))))
+
+(rule ((-> ctx2 ex) (-> ctx1 ctx2))
+      ((-> ctx1 ex)))
 
 (run-schedule (saturate (run)))
 
+(ruleset post)
+
 (relation bounds (String f64 String f64))
 
-(rule ((-> (Ctx (set-of (Leaf (Par (Var "a") ?a_p)) (Leaf (Par (Var "b") ?b_p)))) _ex))
-      ((bounds "a" ?a_p "b" ?b_p)))
+(rule ((-> (Tens (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p)) ex))
+      ((bounds "a" a_p "b" b_p)) :ruleset post)
 
-; (run 1)
+(run post 1)
 
 (print-function bounds 10)
-
-(query-extract (Ctx c))
 
 ; (
 ;    (bounds "a" 1.0 "b" 4.0)
 ; )
 
-
-; Took 0.09478670899989083 seconds
+; Took 0.02649387498968281 seconds

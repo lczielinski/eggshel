@@ -38,5 +38,6 @@
 ;; morphism relation
 (relation -> (Ctx Ctx))
 
+;; congruence
 (rule ((-> b c) (= e (Tens a b)))
     ((-> e (Tens a c))))
