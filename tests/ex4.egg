@@ -3,26 +3,23 @@
 (rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "c") c_p) (Base 0.0 (Var "d") d_p))
       ((Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Tens (Base 0.0 (Var "c") c_p) (Base 0.0 (Var "d") d_p))))))
 
+(ruleset trans)
+
 (rule ((-> ctx2 ex) (-> ctx1 ctx2))
-      ((-> ctx1 ex)))
-
-(run-schedule (saturate (run)))
-
-(ruleset post)
+      ((-> ctx1 ex)) :ruleset trans)
 
 (relation bounds (String f64 String f64 String f64 String f64))
+
+(ruleset post)
 
 (rule ((-> (Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Tens (Base 0.0 (Var "c") c_p) (Base 0.0 (Var "d") d_p)))) ex))
       ((bounds "a" a_p "b" b_p "c" c_p "d" d_p)) :ruleset post)
 
-(run post 1)
+(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))
 
 (print-function bounds 10)
 
 ; (
-;    (bounds "a" 1.0 "b" 1.0 "c" 2.0 "d" 1.0)
-;    (bounds "a" 1.5 "b" 1.0 "c" 1.5 "d" 1.0)
-;    (bounds "a" 2.0 "b" 1.0 "c" 1.0 "d" 1.0)
 ; )
 
-; Took 0.17195312501280569 seconds
+; Took 0.032293374999426305 seconds

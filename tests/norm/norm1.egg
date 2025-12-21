@@ -15,7 +15,7 @@
 (rule ((-> (Base 0.0 (Var "x") x_p) ex))
       ((bounds "x" x_p)) :ruleset post)
 
-(run-schedule (repeat 100 (seq (run) (run trans))) (run post))
+(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))
 
 (print-function bounds 10)
 
@@ -23,4 +23,4 @@
 ;    (bounds "x" 1.5)
 ; )
 
-; Took 0.02101541598676704 seconds
+; Took 0.025088249996770173 seconds
