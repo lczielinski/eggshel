@@ -1,4 +1,4 @@
-(let ex (Base 0.0 (Add (Var "x") (Add (Mul (Var "a") (Var "x")) (Add (Mul (Var "b") (Var "x")) (Add (Mul (Var "c") (Var "x")) (Mul (Var "d") (Var "x")))))) 0.0))
+(let ex (Base 0.0 (Add (Var "x") (Add (Mul (Var "x") (Mul (Var "x") (Var "a"))) (Add (Mul (Var "x") (Mul (Var "x") (Var "b"))) (Add (Mul (Var "x") (Mul (Var "x") (Var "c"))) (Mul (Var "x") (Mul (Var "x") (Var "d"))))))) 0.0))
 
 (rule ((Base 0.0 (Var "x") x_p) (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "c") c_p) (Base 0.0 (Var "d") d_p))
       ((Tens (Base 0.0 (Var "x") x_p) (Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Tens (Base 0.0 (Var "c") c_p) (Base 0.0 (Var "d") d_p)))))))
@@ -20,7 +20,7 @@
 (print-function bounds 10)
 
 ; (
-;    (bounds "x" 1.0 "a" 2.0 "b" 3.0 "c" 4.0 "d" 4.0)
+;    (bounds "x" 1.0 "a" 4.0 "b" 5.0 "c" 6.0 "d" 6.0)
 ; )
 
-; Took 0.7245377090002876 seconds
+; Took 232.342453499994 seconds

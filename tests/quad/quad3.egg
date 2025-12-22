@@ -20,6 +20,7 @@
 (print-function bounds 10)
 
 ; (
+;    (bounds "x" 1.0 "a" 4.0 "b" 4.0)
 ; )
 
-; Took 0.028446292009903118 seconds
+; Took 0.050263832992641255 seconds

@@ -93,6 +93,7 @@ run("linear/linear3", "(Add x (Add (Mul a x) (Mul b x)))", "x a b")
 run("linear/linear4", "(Add x (Add (Mul a x) (Add (Mul b x) (Mul c x)))))", "x a b c")
 run("linear/linear5", "(Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Mul d x))))))", "x a b c d")
 run("linear/linear6", "(Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Mul e x)))))))", "x a b c d e")
+run("linear/linear7", "(Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Mul f x)))))))", "x a b c d e f")
 
 run("norm/norm1", "(Sqrt (Mul x x))", "x")
 run("norm/norm2", "(Sqrt (Add (Mul x x) (Mul y y)))", "x y")
@@ -105,6 +106,7 @@ run("norm/norm7", "(Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul 
 run("quad/quad2", "(Add x (Mul x (Mul x a)))", "x a")
 run("quad/quad3", "(Add x (Add (Mul x (Mul x a)) (Mul x (Mul x b))))", "x a b")
 run("quad/quad4", "(Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Mul x (Mul x c)))))", "x a b c")
+run("quad/quad5", "(Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Add (Mul x (Mul x c)) (Mul x (Mul x d))))))", "x a b c d")
 
 run("ex1", "(Add x (Add (Mul a x) (Mul (Mul b x) x)))", "a b x")
 run("ex2", "(Add a (Sqrt (Mul a b)))", "a b")

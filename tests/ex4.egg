@@ -20,6 +20,9 @@
 (print-function bounds 10)
 
 ; (
+;    (bounds "a" 1.0 "b" 1.0 "c" 2.0 "d" 1.0)
+;    (bounds "a" 1.5 "b" 1.0 "c" 1.5 "d" 1.0)
+;    (bounds "a" 2.0 "b" 1.0 "c" 1.0 "d" 1.0)
 ; )
 
-; Took 0.032293374999426305 seconds
+; Took 0.12863045898848213 seconds
