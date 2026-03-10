@@ -1,6 +1,6 @@
-FILE ?= 
+.PHONY: clean examples
+clean:
+	find benchmarks examples -name "*.egg" -delete
 
-.PHONY: run
-run:
-	@echo "Running $(FILE)..."
-	@egglog src/definitions.egg src/context.egg src/operations.egg src/share.egg examples/$(FILE).egg
+examples:
+	bash eggshel.sh examples/examples.txt

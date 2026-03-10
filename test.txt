@@ -1,0 +1,1 @@
+benchmarks/dotprod/dotprod2 (Add (Mul x1 y1) (Mul x2 y2))

@@ -1,0 +1,6 @@
+examples/ex1 (Add x (Add (Mul a x) (Mul (Mul b x) x)))
+examples/ex2 (Add a (Sqrt (Mul a b)))
+examples/ex3 (Mul (Add a b) (Add b a))
+examples/ex4 (Mul (Add a (Mul a b)) (Add c (Mul c d)))
+examples/ex5 (Add a (Mul a (Sqrt b)))
+examples/ex6 (Sqrt (Add (Mul a x) (Sqrt b)))

@@ -1,0 +1,26 @@
+(let ex (Base 0.0 (Add (Var "a") (Sqrt (Mul (Var "a") (Var "b")))) 0.0))
+
+(rule ((Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))
+      ((Tens (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p))))
+
+(ruleset trans)
+
+(rule ((-> ctx2 ex) (-> ctx1 ctx2))
+      ((-> ctx1 ex)) :ruleset trans)
+
+(relation bounds (String f64 String f64))
+
+(ruleset post)
+
+(rule ((-> (Tens (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p)) ex))
+      ((bounds "a" a_p "b" b_p)) :ruleset post)
+
+(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))
+
+(print-function bounds 10)
+
+; (
+;    (bounds "a" 1.0 "b" 4.0)
+; )
+
+; Took 0.029176708005252294 seconds

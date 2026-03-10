@@ -1,0 +1,21 @@
+(let ex (Base 0.0 (Sqrt (Add (Mul (Var "x") (Var "x")) (Add (Mul (Var "y") (Var "y")) (Add (Mul (Var "z") (Var "z")) (Add (Mul (Var "a") (Var "a")) (Mul (Var "b") (Var "b"))))))) 0.0))
+
+(rule ((Base 0.0 (Var "Base") Base_p) (Base 0.0 (Var "Var") Var_p) (Base 0.0 (Var "a") a_p) (Base 0.0 (Var "b") b_p) (Base 0.0 (Var "x") x_p) (Base 0.0 (Var "y") y_p) (Base 0.0 (Var "z") z_p))
+      ((Tens (Base 0.0 (Var "Base") Base_p) (Tens (Base 0.0 (Var "Var") Var_p) (Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Tens (Base 0.0 (Var "x") x_p) (Tens (Base 0.0 (Var "y") y_p) (Base 0.0 (Var "z") z_p)))))))))
+
+(ruleset trans)
+
+(rule ((-> ctx2 ex) (-> ctx1 ctx2))
+      ((-> ctx1 ex)) :ruleset trans)
+
+(relation bounds (String f64 String f64 String f64 String f64 String f64 String f64 String f64))
+
+(ruleset post)
+
+(rule ((-> (Tens (Base 0.0 (Var "Base") Base_p) (Tens (Base 0.0 (Var "Var") Var_p) (Tens (Base 0.0 (Var "a") a_p) (Tens (Base 0.0 (Var "b") b_p) (Tens (Base 0.0 (Var "x") x_p) (Tens (Base 0.0 (Var "y") y_p) (Base 0.0 (Var "z") z_p))))))) ex))
+      ((bounds "Base" Base_p "Var" Var_p "a" a_p "b" b_p "x" x_p "y" y_p "z" z_p)) :ruleset post)
+
+(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))
+
+(print-function bounds 10)
+
