@@ -1,0 +1,22 @@
+(let ex (Base 0.0 (Add (Mul (Var "x1") (Var "y1")) (Mul (Var "x2") (Var "y2"))) 0.0))
+
+(rule ((Base 0.0 (Var "x1") x1_p) (Base 0.0 (Var "x2") x2_p) (Base 0.0 (Var "y1") y1_p) (Base 0.0 (Var "y2") y2_p))
+      ((Tens (Base 0.0 (Var "x1") x1_p) (Tens (Base 0.0 (Var "x2") x2_p) (Tens (Base 0.0 (Var "y1") y1_p) (Base 0.0 (Var "y2") y2_p))))))
+
+(ruleset trans)
+
+(rule ((-> ctx2 ex) (-> ctx1 ctx2))
+      ((-> ctx1 ex)) :ruleset trans)
+
+(relation bounds (String f64 String f64 String f64 String f64))
+
+(ruleset post)
+
+(rule ((-> (Tens (Base 0.0 (Var "x1") x1_p) (Tens (Base 0.0 (Var "x2") x2_p) (Tens (Base 0.0 (Var "y1") y1_p) (Base 0.0 (Var "y2") y2_p)))) ex))
+      ((bounds "x1" x1_p "x2" x2_p "y1" y1_p "y2" y2_p)) :ruleset post)
+
+(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))
+
+(print-function bounds 10)
+
+; Took 0.019060833990806714 seconds

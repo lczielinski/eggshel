@@ -1,4 +1,4 @@
-(let ex (Base 0.0 (Add (Var "x") (Mul (Var "a") (Var "x"))) 0.0))
+(let ex (Base 0.0 (Add (Var "x") (Mul (Var "x") (Mul (Var "x") (Var "a")))) 0.0))
 
 (rule ((Base 0.0 (Var "x") x_p) (Base 0.0 (Var "a") a_p))
       ((Tens (Base 0.0 (Var "x") x_p) (Base 0.0 (Var "a") a_p))))
@@ -20,7 +20,7 @@
 (print-function bounds 10)
 
 ; (
-;    (bounds "x" 1.0 "a" 1.0)
+;    (bounds "x" 1.0 "a" 3.0)
 ; )
 
-; Took 0.02754545898642391 seconds
+; Took 0.034341708989813924 seconds

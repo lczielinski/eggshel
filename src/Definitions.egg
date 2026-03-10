@@ -1,3 +1,6 @@
+;; basic definitions: expressions, objects, relation
+
+;; a tuple of expressions, representing a function
 (datatype Expr
     (Var String) ;; variable
     (Vars Expr Expr) ;; shared variables
@@ -5,6 +8,7 @@
     (Mul Expr Expr) ;; mul
     (Sqrt Expr)) ;; square root  
 
+;; equivalent expressions
 (rewrite (Vars e1 e2)
     (Vars e2 e1))
 (rewrite (Add e1 e2)
@@ -12,19 +16,18 @@
 (rewrite (Mul e1 e2)
     (Mul e2 e1))
 
+;; a Shel object
 (datatype Ctx
-    ;; an object (R^n, R, p)
-    ;; arg1 is the error pushed from star parent. 
-    ;; if no star parent then should be 0.0
-    ;; arg2 is the expression it represents
-    ;; arg3 is the error bound, p
+    ;; (Base i e p) is an object (R^n, R, p)
+    ;; where e is an n-ary expression tuple
+    ;; and i is the push product homomorphism 
+    ;; (if this object is a push product dependent)
     (Base f64 Expr f64) 
-    ;; tensoring two objects
+    ;; tensor product
     (Tens Ctx Ctx)
-    ;; the star of two objects.
-    ;; the left (parent) should be a Base object
-    ;; the right is the tensor of Base objects, each with
-    ;; their own pushed error
+    ;; push product
+    ;; left (parent) is a Base
+    ;; right is the tensor of Bases
     (Star Ctx Ctx)) 
 
 ;; tensor associativity
@@ -38,6 +41,6 @@
 ;; morphism relation
 (relation -> (Ctx Ctx))
 
-;; congruence
+;; tensor congruence
 (rule ((-> b c) (= e (Tens a b)))
     ((-> e (Tens a c))))

@@ -1,0 +1,22 @@
+(let ex (Base 0.0 (Add (Var "a1") (Add (Var "a2") (Add (Var "a3") (Add (Var "a4") (Add (Var "a5") (Add (Var "a6") (Add (Var "a7") (Add (Var "a8") (Add (Var "a9") (Add (Var "a10") (Add (Var "a11") (Add (Var "a12") (Add (Var "a13") (Add (Var "a14") (Add (Var "a15") (Add (Var "a16") (Add (Var "a17") (Add (Var "a18") (Add (Var "a19") (Var "a20")))))))))))))))))))) 0.0))
+
+(rule ((Base 0.0 (Var "a1") a1_p) (Base 0.0 (Var "a2") a2_p) (Base 0.0 (Var "a3") a3_p) (Base 0.0 (Var "a4") a4_p) (Base 0.0 (Var "a5") a5_p) (Base 0.0 (Var "a6") a6_p) (Base 0.0 (Var "a7") a7_p) (Base 0.0 (Var "a8") a8_p) (Base 0.0 (Var "a9") a9_p) (Base 0.0 (Var "a10") a10_p) (Base 0.0 (Var "a11") a11_p) (Base 0.0 (Var "a12") a12_p) (Base 0.0 (Var "a13") a13_p) (Base 0.0 (Var "a14") a14_p) (Base 0.0 (Var "a15") a15_p) (Base 0.0 (Var "a16") a16_p) (Base 0.0 (Var "a17") a17_p) (Base 0.0 (Var "a18") a18_p) (Base 0.0 (Var "a19") a19_p) (Base 0.0 (Var "a20") a20_p))
+      ((Tens (Base 0.0 (Var "a1") a1_p) (Tens (Base 0.0 (Var "a2") a2_p) (Tens (Base 0.0 (Var "a3") a3_p) (Tens (Base 0.0 (Var "a4") a4_p) (Tens (Base 0.0 (Var "a5") a5_p) (Tens (Base 0.0 (Var "a6") a6_p) (Tens (Base 0.0 (Var "a7") a7_p) (Tens (Base 0.0 (Var "a8") a8_p) (Tens (Base 0.0 (Var "a9") a9_p) (Tens (Base 0.0 (Var "a10") a10_p) (Tens (Base 0.0 (Var "a11") a11_p) (Tens (Base 0.0 (Var "a12") a12_p) (Tens (Base 0.0 (Var "a13") a13_p) (Tens (Base 0.0 (Var "a14") a14_p) (Tens (Base 0.0 (Var "a15") a15_p) (Tens (Base 0.0 (Var "a16") a16_p) (Tens (Base 0.0 (Var "a17") a17_p) (Tens (Base 0.0 (Var "a18") a18_p) (Tens (Base 0.0 (Var "a19") a19_p) (Base 0.0 (Var "a20") a20_p))))))))))))))))))))))
+
+(ruleset trans)
+
+(rule ((-> ctx2 ex) (-> ctx1 ctx2))
+      ((-> ctx1 ex)) :ruleset trans)
+
+(relation bounds (String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64))
+
+(ruleset post)
+
+(rule ((-> (Tens (Base 0.0 (Var "a1") a1_p) (Tens (Base 0.0 (Var "a2") a2_p) (Tens (Base 0.0 (Var "a3") a3_p) (Tens (Base 0.0 (Var "a4") a4_p) (Tens (Base 0.0 (Var "a5") a5_p) (Tens (Base 0.0 (Var "a6") a6_p) (Tens (Base 0.0 (Var "a7") a7_p) (Tens (Base 0.0 (Var "a8") a8_p) (Tens (Base 0.0 (Var "a9") a9_p) (Tens (Base 0.0 (Var "a10") a10_p) (Tens (Base 0.0 (Var "a11") a11_p) (Tens (Base 0.0 (Var "a12") a12_p) (Tens (Base 0.0 (Var "a13") a13_p) (Tens (Base 0.0 (Var "a14") a14_p) (Tens (Base 0.0 (Var "a15") a15_p) (Tens (Base 0.0 (Var "a16") a16_p) (Tens (Base 0.0 (Var "a17") a17_p) (Tens (Base 0.0 (Var "a18") a18_p) (Tens (Base 0.0 (Var "a19") a19_p) (Base 0.0 (Var "a20") a20_p)))))))))))))))))))) ex))
+      ((bounds "a1" a1_p "a2" a2_p "a3" a3_p "a4" a4_p "a5" a5_p "a6" a6_p "a7" a7_p "a8" a8_p "a9" a9_p "a10" a10_p "a11" a11_p "a12" a12_p "a13" a13_p "a14" a14_p "a15" a15_p "a16" a16_p "a17" a17_p "a18" a18_p "a19" a19_p "a20" a20_p)) :ruleset post)
+
+(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))
+
+(print-function bounds 10)
+
+; Took 2884.2968932499934 seconds
