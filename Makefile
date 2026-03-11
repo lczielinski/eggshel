@@ -3,4 +3,7 @@ clean:
 	find benchmarks examples -name "*.egg" -delete
 
 examples:
-	bash eggshel.sh examples/examples.txt
+	python3 -m eggshel -f examples/examples.txt
+
+benchmarks:
+	python3 -m eggshel -f benchmarks/benchmarks.txt
