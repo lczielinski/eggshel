@@ -5,6 +5,10 @@ import subprocess, sys, textwrap, time
 lib_files = ["definitions", "context", "share", "operations"]
 lib = " ".join(f"lib/{name}.egg" for name in lib_files)
 
+# format an egglog output given as 
+# (
+#   (bounds "a" 1.0 "b" 2.0)
+# )
 def parse_output(output, seconds):
     lines = [l.strip() for l in output.strip().strip("()").strip().splitlines() if l.strip()]
     message = ""
@@ -36,8 +40,4 @@ def run_program(file):
             output = parse_output(result.stdout, end - start)
     except subprocess.TimeoutExpired:
         output = "Timed out after 1 hour"
-
-    with open(file, "a") as f:
-        f.write(textwrap.indent(output, ";  "))
-
     return output

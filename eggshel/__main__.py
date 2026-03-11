@@ -2,6 +2,13 @@ import argparse, sys, tempfile, os
 from .runner import run_program
 from .generate import generate_program
 
+def generate_and_run(expr):
+    tmp = tempfile.mktemp(dir=".")
+    generate_program(tmp, expr)
+    output = run_program(tmp)
+    os.remove(tmp)
+    return output
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="eggshel", description="A backward error analysis tool.")
     parser.add_argument("expression", nargs="?", help="a single expression to evaluate")
@@ -26,19 +33,16 @@ if __name__ == "__main__":
             line = line.strip()
             if not line:
                 continue
-            file, expr = line.split(None, 1)
-            output = f"File: {file}\nExpression: {expr}\nResults:\n"
-            generate_program(file, expr)
-            output += run_program(file)
+            name, expr = line.split(None, 1)
+            output = f"Name: {name}\nExpression: {expr}\nResults:\n"
+            output += generate_and_run(expr)
             results.append(output)
         # write in .results file
         sep = "\n\n" + ("=" * 40) + "\n\n"
         with open(args.file + ".results", "w") as f:
             f.write(sep.join(results))
     else:
+        # just print results in terminal
         expr = args.expression
-        tmp = tempfile.mktemp(dir=".", suffix=".egg")
-        generate_program(tmp, expr)
-        output = run_program(tmp)
+        output = generate_and_run(expr)
         print(output)
-        os.remove(tmp)

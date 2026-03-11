@@ -1,2 +1,0 @@
-benchmarks/dotprod/dotprod2.egg (Add (Mul x1 y1) (Mul x2 y2))
-benchmarks/dotprod/dotprod3.egg (Add (Mul x1 y1) (Add (Mul x2 y2) (Mul x3 y3)))

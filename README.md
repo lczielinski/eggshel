@@ -1,22 +1,22 @@
 eggshel: a floating-point backward error analysis tool described in the paper **Synthesizing Backward Error Bounds, Backward**. This project is licensed under the MIT license.
 
 ## Getting started 
-eggshel can be built manually or using the provided Docker image.
+First, clone the repository. eggshel can be built manually or using the provided Docker image.
 
 ### Build with Docker
 
-If you have [Docker](https://docs.docker.com/engine/install/), in the `bean` directory, run
+If you have [Docker](https://docs.docker.com/engine/install/), in the project root directory, run
 ```
-docker build -t bean .
+docker build -t eggshel .
 ```
 After the Docker image builds, you can enter a TTY with
 ```
-docker run -it --rm bean
+docker run -it --rm eggshel
 ```
 
 ### Build manually
 
-This manual build has been tested on `macOS 15.4`.
+This manual build has been tested on `macOS 26.3.1`.
 First, get `opam >= 2.3` [here](https://opam.ocaml.org/doc/Install.html). 
 You need `ocaml >= 5.1` plus `dune >= 3.17` and `menhir >= 20240715`. 
 Install them with 
@@ -33,9 +33,9 @@ Build Bean via `dune`:
 dune build
 ```
 
-## Running a Bean program
+## Executing a program in eggshel
 
-Type check an example with the following command:
+Run a 
 ```
 dune exec -- bean examples/InnerProduct.be
 ```

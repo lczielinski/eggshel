@@ -1,0 +1,2 @@
+dotprod2 (Add (Mul x1 y1) (Mul x2 y2))
+dotprod3 (Add (Mul x1 y1) (Add (Mul x2 y2) (Mul x3 y3)))

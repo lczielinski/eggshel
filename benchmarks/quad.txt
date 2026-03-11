@@ -1,0 +1,5 @@
+quad2 (Add x (Mul x (Mul x a)))
+quad3 (Add x (Add (Mul x (Mul x a)) (Mul x (Mul x b))))
+quad4 (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Mul x (Mul x c)))))
+quad5 (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Add (Mul x (Mul x c)) (Mul x (Mul x d))))))
+quad6 (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Add (Mul x (Mul x c)) (Add (Mul x (Mul x d)) (Mul (Mul x e)))))))

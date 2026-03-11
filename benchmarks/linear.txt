@@ -1,0 +1,7 @@
+linear2 (Add x (Mul a x))
+linear3 (Add x (Add (Mul a x) (Mul b x)))
+linear4 (Add x (Add (Mul a x) (Add (Mul b x) (Mul c x))))
+linear5 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Mul d x)))))
+linear6 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Mul e x))))))
+linear7 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Mul f x)))))))
+linear8 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Add (Mul f x) (Mul g x))))))))
