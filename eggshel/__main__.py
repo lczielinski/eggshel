@@ -1,4 +1,6 @@
-import argparse, sys
+import argparse, sys, tempfile, os
+from .runner import run_program
+from .generate import generate_program
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="eggshel", description="A backward error analysis tool.")
@@ -18,8 +20,25 @@ if __name__ == "__main__":
                 source = f.read()
         except FileNotFoundError:
             parser.error(f"file not found: {args.file}")
-        
-    else:
-        source = args.expression
 
-    print(f"Got: {source}")
+        results = []
+        for line in source.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            file, expr = line.split(None, 1)
+            output = f"File: {file}\nExpression: {expr}\nResults:\n"
+            generate_program(file, expr)
+            output += run_program(file)
+            results.append(output)
+        # write in .results file
+        sep = "\n\n" + ("=" * 40) + "\n\n"
+        with open(args.file + ".results", "w") as f:
+            f.write(sep.join(results))
+    else:
+        expr = args.expression
+        tmp = tempfile.mktemp(dir=".", suffix=".egg")
+        generate_program(tmp, expr)
+        output = run_program(tmp)
+        print(output)
+        os.remove(tmp)

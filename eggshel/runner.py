@@ -2,23 +2,42 @@ import subprocess, sys, textwrap, time
 
 # running eggshel programs
 
-src_files = ["definitions", "context", "share", "operations"]
+lib_files = ["definitions", "context", "share", "operations"]
+lib = " ".join(f"lib/{name}.egg" for name in lib_files)
 
-src = " ".join(f"src/{name}.egg" for name in src_files)
+def parse_output(output, seconds):
+    lines = [l.strip() for l in output.strip().strip("()").strip().splitlines() if l.strip()]
+    message = ""
+    if not lines:
+        message = "No bounds found.\n"
+    for i, line in enumerate(lines, 1):
+        tokens = line.strip("()").split()
+        tokens = tokens[1:]
 
-def run_temp_program(program):
+        pairs = []
+        for j in range(0, len(tokens), 2):
+            name = tokens[j].strip("\"")
+            value = tokens[j + 1]
+            pairs.append(f"{name} with {value}ε")
 
-def run_program(name):
-    file = name + ".egg"
-    command = f"egglog {src} {file}"
+        message += f"({i}) Found bounds: {', '.join(pairs)}\n"
+    return message + f"Took {seconds} seconds"
+
+def run_program(file):
+    command = f"egglog {lib} {file}"
+
+    start = time.perf_counter()
+    try:
+        result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=3600)
+        end = time.perf_counter()
+        if result.returncode != 0:
+            output = f"Error:\n{result.stderr}"
+        else:
+            output = parse_output(result.stdout, end - start)
+    except subprocess.TimeoutExpired:
+        output = "Timed out after 1 hour"
 
     with open(file, "a") as f:
-        start = time.perf_counter()
-        try:
-            result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=3600)
-            end = time.perf_counter()
-            # write output in file
-            output = textwrap.indent(result.stdout, "; ") + f"; Took {end - start} seconds"
-        except subprocess.TimeoutExpired:
-            output = "; Timed out after 1 hour"
-        f.write(output)
+        f.write(textwrap.indent(output, ";  "))
+
+    return output

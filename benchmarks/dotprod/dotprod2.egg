@@ -19,16 +19,13 @@
 
 (print-function bounds 10)
 
-; (
-;    (bounds "x1" 0.0 "x2" 2.0 "y1" 2.0 "y2" 0.0)
-;    (bounds "x1" 2.0 "x2" 2.0 "y1" 0.0 "y2" 0.0)
-;    (bounds "x1" 1.0 "x2" 2.0 "y1" 1.0 "y2" 0.0)
-;    (bounds "x1" 0.0 "x2" 1.0 "y1" 2.0 "y2" 1.0)
-;    (bounds "x1" 2.0 "x2" 1.0 "y1" 0.0 "y2" 1.0)
-;    (bounds "x1" 1.0 "x2" 1.0 "y1" 1.0 "y2" 1.0)
-;    (bounds "x1" 0.0 "x2" 0.0 "y1" 2.0 "y2" 2.0)
-;    (bounds "x1" 2.0 "x2" 0.0 "y1" 0.0 "y2" 2.0)
-;    (bounds "x1" 1.0 "x2" 0.0 "y1" 1.0 "y2" 2.0)
-; )
-
-; Took 0.03826324999681674 seconds
+;  (1) Found bounds: x1 with 0.0ε, x2 with 2.0ε, y1 with 2.0ε, y2 with 0.0ε
+;  (2) Found bounds: x1 with 2.0ε, x2 with 2.0ε, y1 with 0.0ε, y2 with 0.0ε
+;  (3) Found bounds: x1 with 1.0ε, x2 with 2.0ε, y1 with 1.0ε, y2 with 0.0ε
+;  (4) Found bounds: x1 with 0.0ε, x2 with 1.0ε, y1 with 2.0ε, y2 with 1.0ε
+;  (5) Found bounds: x1 with 2.0ε, x2 with 1.0ε, y1 with 0.0ε, y2 with 1.0ε
+;  (6) Found bounds: x1 with 1.0ε, x2 with 1.0ε, y1 with 1.0ε, y2 with 1.0ε
+;  (7) Found bounds: x1 with 0.0ε, x2 with 0.0ε, y1 with 2.0ε, y2 with 2.0ε
+;  (8) Found bounds: x1 with 2.0ε, x2 with 0.0ε, y1 with 0.0ε, y2 with 2.0ε
+;  (9) Found bounds: x1 with 1.0ε, x2 with 0.0ε, y1 with 1.0ε, y2 with 2.0ε
+;  Took 0.027662541018798947 seconds

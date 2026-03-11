@@ -1,21 +1,32 @@
 (let ex (Base 0.0 (Add (Mul (Var "x1") (Var "y1")) (Add (Mul (Var "x2") (Var "y2")) (Mul (Var "x3") (Var "y3")))) 0.0))
 
-(rule ((Base 0.0 (Var "Base") Base_p) (Base 0.0 (Var "Var") Var_p) (Base 0.0 (Var "x1") x1_p) (Base 0.0 (Var "x2") x2_p) (Base 0.0 (Var "x3") x3_p) (Base 0.0 (Var "y1") y1_p) (Base 0.0 (Var "y2") y2_p) (Base 0.0 (Var "y3") y3_p))
-      ((Tens (Base 0.0 (Var "Base") Base_p) (Tens (Base 0.0 (Var "Var") Var_p) (Tens (Base 0.0 (Var "x1") x1_p) (Tens (Base 0.0 (Var "x2") x2_p) (Tens (Base 0.0 (Var "x3") x3_p) (Tens (Base 0.0 (Var "y1") y1_p) (Tens (Base 0.0 (Var "y2") y2_p) (Base 0.0 (Var "y3") y3_p))))))))))
+(rule ((Base 0.0 (Var "x1") x1_p) (Base 0.0 (Var "x2") x2_p) (Base 0.0 (Var "x3") x3_p) (Base 0.0 (Var "y1") y1_p) (Base 0.0 (Var "y2") y2_p) (Base 0.0 (Var "y3") y3_p))
+      ((Tens (Base 0.0 (Var "x1") x1_p) (Tens (Base 0.0 (Var "x2") x2_p) (Tens (Base 0.0 (Var "x3") x3_p) (Tens (Base 0.0 (Var "y1") y1_p) (Tens (Base 0.0 (Var "y2") y2_p) (Base 0.0 (Var "y3") y3_p))))))))
 
 (ruleset trans)
 
 (rule ((-> ctx2 ex) (-> ctx1 ctx2))
       ((-> ctx1 ex)) :ruleset trans)
 
-(relation bounds (String f64 String f64 String f64 String f64 String f64 String f64 String f64 String f64))
+(relation bounds (String f64 String f64 String f64 String f64 String f64 String f64))
 
 (ruleset post)
 
-(rule ((-> (Tens (Base 0.0 (Var "Base") Base_p) (Tens (Base 0.0 (Var "Var") Var_p) (Tens (Base 0.0 (Var "x1") x1_p) (Tens (Base 0.0 (Var "x2") x2_p) (Tens (Base 0.0 (Var "x3") x3_p) (Tens (Base 0.0 (Var "y1") y1_p) (Tens (Base 0.0 (Var "y2") y2_p) (Base 0.0 (Var "y3") y3_p)))))))) ex))
-      ((bounds "Base" Base_p "Var" Var_p "x1" x1_p "x2" x2_p "x3" x3_p "y1" y1_p "y2" y2_p "y3" y3_p)) :ruleset post)
+(rule ((-> (Tens (Base 0.0 (Var "x1") x1_p) (Tens (Base 0.0 (Var "x2") x2_p) (Tens (Base 0.0 (Var "x3") x3_p) (Tens (Base 0.0 (Var "y1") y1_p) (Tens (Base 0.0 (Var "y2") y2_p) (Base 0.0 (Var "y3") y3_p)))))) ex))
+      ((bounds "x1" x1_p "x2" x2_p "x3" x3_p "y1" y1_p "y2" y2_p "y3" y3_p)) :ruleset post)
 
 (run-schedule (seq (saturate (seq (run) (run trans))) (run post)))
 
 (print-function bounds 10)
 
+;  (1) Found bounds: x1 with 2.0ε, x2 with 3.0ε, x3 with 3.0ε, y1 with 0.0ε, y2 with 0.0ε, y3 with 0.0ε
+;  (2) Found bounds: x1 with 2.0ε, x2 with 0.0ε, x3 with 3.0ε, y1 with 0.0ε, y2 with 3.0ε, y3 with 0.0ε
+;  (3) Found bounds: x1 with 2.0ε, x2 with 1.5ε, x3 with 3.0ε, y1 with 0.0ε, y2 with 1.5ε, y3 with 0.0ε
+;  (4) Found bounds: x1 with 2.0ε, x2 with 0.0ε, x3 with 1.5ε, y1 with 0.0ε, y2 with 3.0ε, y3 with 1.5ε
+;  (5) Found bounds: x1 with 2.0ε, x2 with 3.0ε, x3 with 1.5ε, y1 with 0.0ε, y2 with 0.0ε, y3 with 1.5ε
+;  (6) Found bounds: x1 with 2.0ε, x2 with 1.5ε, x3 with 1.5ε, y1 with 0.0ε, y2 with 1.5ε, y3 with 1.5ε
+;  (7) Found bounds: x1 with 2.0ε, x2 with 0.0ε, x3 with 0.0ε, y1 with 0.0ε, y2 with 3.0ε, y3 with 3.0ε
+;  (8) Found bounds: x1 with 2.0ε, x2 with 3.0ε, x3 with 0.0ε, y1 with 0.0ε, y2 with 0.0ε, y3 with 3.0ε
+;  (9) Found bounds: x1 with 2.0ε, x2 with 1.5ε, x3 with 0.0ε, y1 with 0.0ε, y2 with 1.5ε, y3 with 3.0ε
+;  (10) Found bounds: x1 with 1.0ε, x2 with 3.0ε, x3 with 3.0ε, y1 with 1.0ε, y2 with 0.0ε, y3 with 0.0ε
+;  Took 0.4467482080217451 seconds

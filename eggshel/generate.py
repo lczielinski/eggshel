@@ -38,7 +38,7 @@ def generate_expr(s):
     tokens = s.replace("(", " ( ").replace(")", " ) ").split()
     parsed = parse(tokens)
     replaced = replace_vars(parsed)
-    return "(Base 0.0 " + to_string(replaced) + " 0.0)"
+    return f"(Base 0.0 {to_string(replaced)} 0.0)"
 
 # given "(Add (Mul x y) y)"
 # returns ["x", "y"]
@@ -59,8 +59,8 @@ def generate_ctx(bases):
         result = f"(Tens {bases[i]} {result})"
     return result
 
-# generate full eggshel program
-def generate_program(name, expr):
+# writes full eggshel program
+def generate_program(file, expr):
     var_names = extract_vars(expr)
     expr = generate_expr(expr)
     bases = generate_bases(var_names)
@@ -69,7 +69,6 @@ def generate_program(name, expr):
     bounds_type = " ".join(["String f64"] * len(var_names))
     bounds_query = " ".join(f"\"{var}\" {var}_p" for var in var_names)
 
-    file = name + ".egg"
     os.makedirs(os.path.dirname(file), exist_ok=True)
     with open(file, "w") as f:
         f.write(f"(let ex {expr})\n\n")
@@ -79,8 +78,8 @@ def generate_program(name, expr):
         f.write(f"(rule ((-> ctx2 ex) (-> ctx1 ctx2))\n      ((-> ctx1 ex)) :ruleset trans)\n\n")
         
         f.write(f"(relation bounds ({bounds_type}))\n\n")
-        f.write("(ruleset post)\n\n")
+        f.write(f"(ruleset post)\n\n")
         f.write(f"(rule ((-> {ctx} ex))\n      ((bounds {bounds_query})) :ruleset post)\n\n")
         
-        f.write("(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))\n\n")
-        f.write("(print-function bounds 10)\n\n")
+        f.write(f"(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))\n\n")
+        f.write(f"(print-function bounds 10)\n\n")
