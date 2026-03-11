@@ -1,4 +1,4 @@
-eggshel: a floating-point backward error analysis tool described in the paper **Synthesizing Backward Error Bounds, Backward**. This project is licensed under the MIT license.
+eggshel: a floating-point backward error analysis tool described in Section 6 of the paper **Synthesizing Backward Error Bounds, Backward**. This project is licensed under the MIT license.
 
 ## Getting started 
 First, clone the repository. eggshel can be built manually or using the provided Docker image.
@@ -17,83 +17,60 @@ docker run -it --rm eggshel
 ### Build manually
 
 This manual build has been tested on `macOS 26.3.1`.
-First, get `opam >= 2.3` [here](https://opam.ocaml.org/doc/Install.html). 
-You need `ocaml >= 5.1` plus `dune >= 3.17` and `menhir >= 20240715`. 
-Install them with 
-```
-opam install [package]
-```
-or, in the `bean` directory, you can obtain everything with
-```
-opam install --deps-only .
-```
-
-Build Bean via `dune`:
-```
-dune build
-```
 
 ## Executing a program in eggshel
 
-Run a 
+Run a single program like this:
 ```
-dune exec -- bean examples/InnerProduct.be
+python3 -m eggshel "(Sqrt (Add x y))"
 ```
-- Turn on debug output with the flag `--debug` or `-d`.
-- Disable unicode printing with the flag `--disable-unicode`.
-- Set unit roundoff to `2^(-n)` with the flag `--unit-roundoff <n>` or `-u <n>`. Without this flag, we give the backward error bounds in terms of `ε`, where `ε = u / (1 - u)` and `u` is unit roundoff.
-
-For example, run the `InnerProduct` Bean program with IEEE 754 double precision arithmetic as follows: 
+This program sums two floating-point variables, `x` and `y`, then takes their square root. 
+The result looks like:
 ```
-dune exec -- bean examples/InnerProduct.be -u 53
+(1) Found bounds: x with 3.0ε, y with 3.0ε
+Took 0.02878616697853431 seconds
 ```
+This is a backward error result for the program with respect to `x` and `y` individually.
+The error is given in terms of $\varepsilon$, where $\varepsilon = u / (1 - u)$ and $u$ is unit roundoff.
 
-The program looks like this:
+**Theorem.** For any floating-point inputs `x` and `y`, there exist real numbers $\tilde{x}$ and $\tilde{y}$ such that $\sqrt{\tilde{x}+\tilde{y}}=$`(Sqrt (Add x y))`. The backward error bounds tell us $|\ln(x/\tilde{x})|\leq 3\varepsilon$ and $|\ln(y,\tilde{y})|\leq 3\varepsilon$.
+
+It is possible that no bounds are found, many bounds are found, or the program times out after one hour. If no bounds are found, then the program is *not* backward stable or `eggshel` was unable to prove that it is. If many bounds are found (up to 10 will be returned), this means there were multiple valid ways to distribute the backward error. 
+
+## Running many programs
+To run many programs, create a `.txt` file containing the programs like this:
 ```
-{(u : (dnum, dnum))}
-{(v : (num, num))}
-
-/* 
-    Computes the inner product of two vectors in R^2.
-*/
-
-dlet (u1, u2) = u;
-let (v1, v2) = v;
-
-let x = dmul u1 v1;
-let y = dmul u2 v2;
-add x y
+myprogram1 (Add a b)
+myprogram2 (Add a (Sqrt b))
 ```
-Bean programs start with two lists of input variables: those that are *discrete* followed by those that are *linear*. The sole discrete input to `InnerProduct` is `u : (dnum, dnum)` while the sole linear input is `v : (num, num)`.
-In a nutshell, this means that `u` and `v` are real vectors in ℝ²; however, `v` may have backward error while `u` may not.
-
-The output is:
+Run it like this:
 ```
-[General] Type of the program: ℝ
-[General] Inferred linear context:
-          v :[2.22e-16] (ℝ ⊗ ℝ)
-Execution time: 0.000878s
+python3 -m eggshel -f myprograms.txt
 ```
-The return type of `InnerProduct` is `ℝ`. 
-The inferred context tells us that our input vector `v` has a backward error bound of `2.22e-16`.
+A file `myprograms.txt.results` will be created summarizing the results:
+```
+Name: myprogram1
+Expression: (Add a b)
+Results:
+(1) Found bounds: a with 1.0ε, b with 1.0ε
+Took 0.03328920801868662 seconds
 
-**This means that there exists a vector $\tilde{v}$, where $\max_{i=1,2}|\ln(v_i/\tilde{v}_i)|\leq 2.22\cdot 10^{-16}$, such that $u\cdot\tilde{v}=$`InnerProduct u v`.**
+========================================
 
-Note that for vectors and matrices, we report the maximum componentwise backward error bound. 
+Name: myprogram2
+Expression: (Add a (Sqrt b))
+Results:
+(1) Found bounds: a with 1.0ε, b with 4.0ε
+Took 0.026194458012469113 seconds
+```
 
 ## Running benchmarks
-To run the benchmarks given in Section 5.2 of the paper, use the provided Makefile. Run 
+To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
 ```
-make small
+make benchmarks
 ```
-in the `bean` directory to run the benchmarks which take just a few seconds to run. The output will be piped to a file, `benchmarks.txt`. Run
-```
-make all
-```
-to run all the benchmarks. Note that this make take several minutes. The largest benchmark took us about 16 minutes to complete. Run
+to run all the benchmarks. 
 ```
 make clean
 ```
-to remove the `benchmarks.txt` file and other generated Dune files.
-
-## Writing an eggshel program
+to remove the `.results` files.
