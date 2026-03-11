@@ -69,7 +69,6 @@ def generate_program(file, expr):
     bounds_type = " ".join(["String f64"] * len(var_names))
     bounds_query = " ".join(f"\"{var}\" {var}_p" for var in var_names)
 
-    os.makedirs(os.path.dirname(file), exist_ok=True)
     with open(file, "w") as f:
         f.write(f"(let ex {expr})\n\n")
         f.write(f"(rule ({" ".join(bases)})\n      ({ctx}))\n\n")

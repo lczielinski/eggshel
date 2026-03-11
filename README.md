@@ -18,6 +18,13 @@ docker run -it --rm eggshel
 
 This manual build has been tested on `macOS 26.3.1`.
 
+**Requirements:** `python >= 3.13` and `rust/cargo >= 1.90`
+
+Install `egglog` (tested with v2.0):
+```
+cargo install egglog
+```
+
 ## Executing a program in eggshel
 
 Run a single program like this:

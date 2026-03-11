@@ -3,10 +3,13 @@ from .runner import run_program
 from .generate import generate_program
 
 def generate_and_run(expr):
-    tmp = tempfile.mktemp(dir=".")
-    generate_program(tmp, expr)
-    output = run_program(tmp)
-    os.remove(tmp)
+    fd, tmp = tempfile.mkstemp()
+    os.close(fd)
+    try:
+        generate_program(tmp, expr)
+        output = run_program(tmp)
+    finally:
+        os.remove(tmp)
     return output
 
 if __name__ == "__main__":
@@ -43,6 +46,4 @@ if __name__ == "__main__":
             f.write(sep.join(results))
     else:
         # just print results in terminal
-        expr = args.expression
-        output = generate_and_run(expr)
-        print(output)
+        print(generate_and_run(args.expression))
