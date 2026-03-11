@@ -27,17 +27,17 @@ def parse_output(output, seconds):
         message += f"({i}) Found bounds: {', '.join(pairs)}\n"
     return message + f"Took {seconds} seconds"
 
-def run_program(file):
+def run_program(file, timeout):
     command = f"egglog {lib} {file}"
 
     start = time.perf_counter()
     try:
-        result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=3600)
+        result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=timeout)
         end = time.perf_counter()
         if result.returncode != 0:
             output = f"Error:\n{result.stderr}"
         else:
             output = parse_output(result.stdout, end - start)
     except subprocess.TimeoutExpired:
-        output = "Timed out after 1 hour"
+        output = f"Timed out after {timeout} seconds"
     return output

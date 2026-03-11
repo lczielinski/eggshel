@@ -1,0 +1,5 @@
+Name: horner2
+Expression: (Add a0 (Mul z (Add a1 (Mul z a2))))
+Results:
+No bounds found.
+Took 0.040381166007136926 seconds

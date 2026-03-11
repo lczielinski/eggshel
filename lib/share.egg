@@ -1,4 +1,4 @@
-;; morphisms that go into the share product
+;; share product morphisms
 
 ;; decombiner, a (x) b -> a x b
 (rule ((= e (Base 0.0 (Vars e1 e2) p)))
