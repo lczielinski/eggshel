@@ -1,6 +1,7 @@
-.PHONY: clean docker benchmarks benchmarks-full
+.PHONY: clean docker benchmarks
 
 TIMEOUT ?= 300
+JOBS_FLAG = $(if $(JOBS),-j $(JOBS),)
 
 clean:
 	find benchmarks -name "*.results" -delete
@@ -10,4 +11,4 @@ docker:
 	docker run -it --rm eggshel
 
 benchmarks:
-	python3 -m eggshel -f benchmarks/*.txt -t $(TIMEOUT)
+	python3 -m eggshel -f benchmarks/*.txt -t $(TIMEOUT) $(JOBS_FLAG)

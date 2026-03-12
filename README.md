@@ -22,7 +22,7 @@ Install `egglog` (tested with v2.0):
 cargo install egglog
 ```
 
-## Executing a program in eggshel
+## Executing a program
 
 Run a single program (an S-expression with operators Sqrt, Add, and Mul) like this:
 ```
@@ -67,20 +67,26 @@ Results:
 (1) Found bounds: a with 1.0ε, b with 4.0ε
 Took 0.026194458012469113 seconds
 ```
-You can also pass in multiple files. All programs will be executed in parallel.
+You can also pass in multiple files. By default, programs will be executed in parallel.
 
 ## Options
-Use the flag `-t` or `--timeout` to set the timeout in seconds (default one hour). 
+Use the flag `-t` or `--timeout` to set the timeout in seconds per program (default one hour). 
 Use the flag `-j` or `--jobs` to set the maximum number of parallel jobs (default CPU count).
 
 ## Running benchmarks
-**We recommend 16GB of memory to run the benchmarks. If you are having issues with benchmarks being killed, try passing in the -j flag to use fewer cores.** To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
+**We recommend 16GB of memory to run the benchmarks.** To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
 ```
-make benchmarks TIMEOUT=300
+make benchmarks
 ```
 to run all the benchmarks with five minutes of timeout per program. 
 **Warning: this may take a few hours to complete.**
-The results will be found in the `benchmarks` directory in the `.txt.results` files. Run 
+The results will be found in the `benchmarks` directory in the `.txt.results` files. 
+
+If you are having memory issues, try 
+```
+make benchmarks JOBS=2
+```
+or the desired number of cores. Run 
 ```
 make benchmarks TIMEOUT=3600
 ```
