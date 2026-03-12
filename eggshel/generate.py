@@ -6,7 +6,7 @@ ops = ["Add", "Mul", "Sqrt"]
 
 # given a string program "(Add (Mul x y) y)"
 # generates "(Base 0.0 (Add (Mul (Var "x") (Var "y")) (Var "y")) 0.0)"
-def generate_expr(s):
+def generate_expr(expr):
     def parse(tokens):
         token = tokens.pop(0)
         if token == "(":
@@ -35,15 +35,15 @@ def generate_expr(s):
             return "(" + " ".join(to_string(item) for item in expr) + ")"
         return str(expr)
     
-    tokens = s.replace("(", " ( ").replace(")", " ) ").split()
+    tokens = expr.replace("(", " ( ").replace(")", " ) ").split()
     parsed = parse(tokens)
     replaced = replace_vars(parsed)
     return f"(Base 0.0 {to_string(replaced)} 0.0)"
 
 # given "(Add (Mul x y) y)"
 # returns ["x", "y"]
-def extract_vars(s):
-    tokens = re.findall(r'[A-Za-z_]\w*', s)
+def extract_vars(expr):
+    tokens = re.findall(r'[A-Za-z_]\w*', expr)
     return sorted(set(t for t in tokens if t not in ops))
 
 # given ["x", "y"]

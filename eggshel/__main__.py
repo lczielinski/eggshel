@@ -1,9 +1,10 @@
-import argparse, sys, tempfile, os
+import argparse, sys, tempfile, os, multiprocessing
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from itertools import groupby
 from .runner import run_program
 from .generate import generate_program
 
+# given an expression, generate temporary file and run
 def generate_and_run(expr, timeout):
     fd, tmp = tempfile.mkstemp()
     os.close(fd)
@@ -19,6 +20,7 @@ if __name__ == "__main__":
     parser.add_argument("expression", nargs="?", help="a single expression to evaluate")
     parser.add_argument("-f", "--files", nargs="+", help="files with list of expressions")
     parser.add_argument("-t", "--timeout", type=int, default=3600, help="set timeout")
+    parser.add_argument("-j", "--jobs", type=int, default=multiprocessing.cpu_count(), help="number of parallel jobs")
 
     args = parser.parse_args()
 
@@ -43,14 +45,17 @@ if __name__ == "__main__":
                 jobs.append((filepath, name, expr))
 
         results = [None] * len(jobs)
-        with ThreadPoolExecutor() as pool:
-            futures = {pool.submit(generate_and_run, expr, args.timeout): i for i, (_, name, expr) in enumerate(jobs)}
-            for future in as_completed(futures):
-                i = futures[future]
-                filepath, name, expr = jobs[i]
-                output = f"Name: {name}\nExpression: {expr}\nResults:\n"
-                output += future.result()
-                results[i] = output
+        try:
+            with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+                futures = {pool.submit(generate_and_run, expr, args.timeout): i for i, (_, name, expr) in enumerate(jobs)}
+                for future in as_completed(futures):
+                    i = futures[future]
+                    filepath, name, expr = jobs[i]
+                    output = f"Name: {name}\nExpression: {expr}\nResults:\n"
+                    output += future.result()
+                    results[i] = output
+        except KeyboardInterrupt:
+            sys.exit(1)
 
         sep = "\n\n" + ("=" * 40) + "\n\n"
         # group results by source file and write each .results file

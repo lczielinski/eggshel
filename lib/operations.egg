@@ -1,3 +1,5 @@
+;; morphisms that apply operations
+
 ;; add, a x b -> (a + b)
 (rule ((= e (Base 0.0 (Add a b) p))
        (= q (+ p 1.0)))
@@ -36,14 +38,14 @@
        (= r (* (+ q 1.0) 0.5)))
     ((-> (Star ctx1 (Tens (Base i (Vars e2 e3) r) ctx3)) e)))
 
-;; dmul, a (x) b -> a * ab (both orderings for Mul)
+;; dmul from tensor, a (x) b -> a * ab
 (rule ((= e (Star ctx1 ctx2))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base 1.0 (Mul e1 e2) q))
        (= r (+ q 1.0)))
     ((-> (Tens ctx1 (Base 0.0 e2 r)) e)))
 
-;; dmul, a * b -> a * ab (both orderings for Mul)
+;; dmul from star, a * b -> a * ab 
 (rule ((= e (Star ctx1 ctx2))
        (= ctx1 (Base 0.0 e1 p))
        (= ctx2 (Base i (Mul e1 e2) q))
@@ -81,3 +83,4 @@
        (= j (* i 2.0))
        (= r (+ (* q 2.0) 2.0)))
     ((-> (Star ctx1 (Tens (Base j e2 r) ctx3)) e)))
+    

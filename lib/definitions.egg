@@ -18,7 +18,7 @@
 
 ;; a Shel object
 (datatype Ctx
-    ;; (Base i e p) is an object (R^n, R, p)
+    ;; (Base i e p) is an object (R^n, R, pε)
     ;; where e is an n-ary expression tuple
     ;; and i is the push product homomorphism 
     ;; (if this object is a push product dependent)

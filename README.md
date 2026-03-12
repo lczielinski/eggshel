@@ -9,7 +9,7 @@ If you have [Docker](https://docs.docker.com/engine/install/), in the project ro
 ```
 make docker
 ```
-to enter a TTY.
+to enter a pseudo-terminal.
 
 ### Build manually
 
@@ -24,7 +24,7 @@ cargo install egglog
 
 ## Executing a program in eggshel
 
-Run a single program like this:
+Run a single program (an S-expression with operators Sqrt, Add, and Mul) like this:
 ```
 python3 -m eggshel "(Sqrt (Add x y))"
 ```
@@ -37,9 +37,9 @@ Took 0.02878616697853431 seconds
 This is a backward error result for the program with respect to `x` and `y` individually.
 The error is given in terms of $\varepsilon$, where $\varepsilon = u / (1 - u)$ and $u$ is unit roundoff.
 
-**Theorem.** For any floating-point inputs `x` and `y`, there exist real numbers $\tilde{x}$ and $\tilde{y}$ such that $\sqrt{\tilde{x}+\tilde{y}}=$`(Sqrt (Add x y))`. The backward error bounds tell us $|\ln(x/\tilde{x})|\leq 3\varepsilon$ and $|\ln(y,\tilde{y})|\leq 3\varepsilon$.
+**Theorem.** For any floating-point inputs `x` and `y`, there exist real numbers $\tilde{x}$ and $\tilde{y}$ such that $\sqrt{\tilde{x}+\tilde{y}}=$`(Sqrt (Add x y))`. The backward error bounds tell us that $|\ln(x/\tilde{x})|\leq 3\varepsilon$ and $|\ln(y,\tilde{y})|\leq 3\varepsilon$.
 
-It is possible that no bounds are found, many bounds are found, or the program times out after one hour. If no bounds are found, then the program is *not* backward stable or `eggshel` was unable to prove that it is. If many bounds are found (up to 10 will be returned), this means there were multiple valid ways to distribute the backward error. 
+It is possible that no bounds are found, many bounds are found, or the program times out. If no bounds are found, then the program is not backward stable or `eggshel` was unable to prove that it is. If many bounds are found (up to 10 will be returned), this means there were multiple valid ways to distribute the backward error. 
 
 ## Running many programs
 To run many programs, create a `.txt` file containing the programs like this:
@@ -67,13 +67,23 @@ Results:
 (1) Found bounds: a with 1.0ε, b with 4.0ε
 Took 0.026194458012469113 seconds
 ```
+You can also pass in multiple files. All programs will be executed in parallel.
+
+## Options
+Use the flag `-t` or `--timeout` to set the timeout in seconds. 
+Use the flag `-j` or `--jobs` to set the maximum number of parallel jobs.
 
 ## Running benchmarks
 To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
 ```
 make benchmarks
 ```
-to run all the benchmarks. 
+to run all the benchmarks with five minutes of timeout.
+Run
+```
+make benchmarks-all
+```
+to run the benchmarks with an hour of timeout. Warning: this may take several hours to complete. Run
 ```
 make clean
 ```

@@ -16,16 +16,16 @@
        (= ctx2 (Base i (Vars e2 e3) q)))
     ((-> (Star ctx1 (Tens (Tens (Base i e2 q) (Base i e3 q)) ctx3)) e)))
 
-;; decombiner, push 0.5, a * b -> a x b
+;; decombiner, a *0.5 b -> a x b
 (rule ((= e (Base 0.0 (Vars e1 e2) p))
        (= q (* p 0.5)))
     ((-> (Star (Base 0.0 e1 p) (Base 0.5 e2 q)) e)))
 
-;; decombiner, push 1, a * b -> a x b
+;; decombiner, a *1 b -> a x b
 (rule ((= e (Base 0.0 (Vars e1 e2) p)))
     ((-> (Star (Base 0.0 e1 p) (Base 1.0 e2 0.0)) e)))
 
-;; decombiner, push 2, a * b -> a x b
+;; decombiner, a *2 b -> a x b
 (rule ((= e (Base 0.0 (Vars e1 e2) p)))
     ((-> (Star (Base 0.0 e1 p) (Base 2.0 e2 p)) e)))
 

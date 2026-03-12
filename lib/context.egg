@@ -1,23 +1,10 @@
-;; morphisms that manipulate variables
+;; morphisms that manipulate the context
 
-;; projection a * ab -> ab
+;; projection a *1 ab -> ab
 (rule ((= e (Base 0.0 (Mul e1 e2) p)))
     ((-> (Star (Base 0.0 e1 0.0) (Base 1.0 (Mul e1 e2) p)) e)))
-
-;; projection a *2 ab -> ab
-(rule ((= e (Base 0.0 (Mul e1 e2) p)))
-    ((-> (Star (Base 0.0 e1 0.0) (Base 2.0 (Mul e1 e2) p)) e)))
 
 ;; (a * b) (x) c -> a * (b (x) c)
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
        (= ctx3 (Base 0.0 e1 p)))
     ((-> (Tens (Star ctx1 ctx2) ctx3) e)))
-
-;; push adjuster
-(rule ((= e (Star ctx1 ctx2))
-       (= ctx2 (Base i e1 p))
-       (< i 2.0)
-       (= j (+ i 1.0))
-    ;    (>= p 1.0)
-       (= q (+ p 1.0)))
-    ((-> (Star ctx1 (Base j e1 q)) e)))
