@@ -9,7 +9,7 @@ If you have [Docker](https://docs.docker.com/engine/install/), in the project ro
 ```
 make docker
 ```
-to enter a pseudo-terminal.
+to enter a pseudo-terminal. **To run benchmarks, make sure you allow Docker containers 16GB of memory.**
 
 ### Build manually
 
@@ -74,18 +74,17 @@ Use the flag `-t` or `--timeout` to set the timeout in seconds (default one hour
 Use the flag `-j` or `--jobs` to set the maximum number of parallel jobs (default CPU count).
 
 ## Running benchmarks
-To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
+**We recommend 16GB of memory to run the benchmarks. If you are having issues with benchmarks being killed, try passing in the -j flag to use fewer cores.** To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
 ```
-make benchmarks
+make benchmarks TIMEOUT=300
 ```
 to run all the benchmarks with five minutes of timeout per program. 
-Warning: this may take up to an hour to complete. 
-The results will be found in the `benchmarks` directory in the `.txt.results` files.
-Run
+**Warning: this may take a few hours to complete.**
+The results will be found in the `benchmarks` directory in the `.txt.results` files. Run 
 ```
-make benchmarks-all
+make benchmarks TIMEOUT=3600
 ```
-to run the benchmarks with an hour of timeout. Warning: this may take several hours to complete. Run
+to achieve the full results. Run
 ```
 make clean
 ```
