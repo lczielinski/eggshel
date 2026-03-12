@@ -8,7 +8,7 @@ docker:
 	docker run -it --rm eggshel
 
 benchmarks:
-	python3 -m eggshel -f benchmarks/*.txt -t 300
+	python3 -m eggshel -f benchmarks/*.txt -t 20
 
 benchmarks-full:
 	python3 -m eggshel -f benchmarks/*.txt -t 3600

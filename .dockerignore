@@ -5,3 +5,4 @@ Dockerfile
 **/__pycache__
 .vscode
 *.md
+LICENSE

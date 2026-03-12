@@ -3,7 +3,7 @@ import subprocess, sys, time
 # running eggshel programs
 
 lib_files = ["definitions", "context", "share", "operations"]
-lib = " ".join(f"lib/{name}.egg" for name in lib_files)
+lib = [f"lib/{name}.egg" for name in lib_files]
 
 # format an egglog output given as 
 # (
@@ -28,14 +28,17 @@ def parse_output(output, seconds):
     return message + f"Took {seconds} seconds"
 
 def run_program(file, timeout):
-    command = f"egglog {lib} {file}"
+    command = ["egglog"] + lib + [file]
 
     start = time.perf_counter()
     try:
-        result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=timeout)
+        result = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
         end = time.perf_counter()
-        if result.returncode != 0:
-            output = f"Error:\n{result.stderr}"
+        if result.returncode == -9:
+            output = "Killed (out of memory)"
+        elif result.returncode != 0:
+            detail = result.stderr or result.stdout or "(no output)"
+            output = f"Error (code {result.returncode}):\n{detail}"
         else:
             output = parse_output(result.stdout, end - start)
     except subprocess.TimeoutExpired:

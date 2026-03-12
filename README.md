@@ -35,11 +35,11 @@ The result looks like:
 Took 0.02878616697853431 seconds
 ```
 This is a backward error result for the program with respect to `x` and `y` individually.
-The error is given in terms of $\varepsilon$, where $\varepsilon = u / (1 - u)$ and $u$ is unit roundoff.
+The error is given in terms of $\varepsilon$, where $\varepsilon = u / (1 - u)$ and $u$ is unit roundoff ($2^{-53}$ for IEEE 754 double precision).
 
-**Theorem.** For any floating-point inputs `x` and `y`, there exist real numbers $\tilde{x}$ and $\tilde{y}$ such that $\sqrt{\tilde{x}+\tilde{y}}=$`(Sqrt (Add x y))`. The backward error bounds tell us that $|\ln(x/\tilde{x})|\leq 3\varepsilon$ and $|\ln(y,\tilde{y})|\leq 3\varepsilon$.
+**Theorem.** For any floating-point inputs `x` and `y`, there exist real numbers $\tilde{x}$ and $\tilde{y}$ such that $\sqrt{\tilde{x}+\tilde{y}}=$`(Sqrt (Add x y))`. The backward error bounds tell us that $|\ln(x/\tilde{x})|\leq 3\varepsilon$ and $|\ln(y/\tilde{y})|\leq 3\varepsilon$.
 
-It is possible that no bounds are found, many bounds are found, or the program times out. If no bounds are found, then the program is not backward stable or `eggshel` was unable to prove that it is. If many bounds are found (up to 10 will be returned), this means there were multiple valid ways to distribute the backward error. 
+It is possible that no bounds are found, many bounds are found, or the program times out. If no bounds are found, then either the program is not backward stable, or `eggshel` was unable to find a proof. If many bounds are found (up to 10 will be returned), this means there were multiple valid ways to distribute the backward error. 
 
 ## Running many programs
 To run many programs, create a `.txt` file containing the programs like this:
@@ -70,15 +70,17 @@ Took 0.026194458012469113 seconds
 You can also pass in multiple files. All programs will be executed in parallel.
 
 ## Options
-Use the flag `-t` or `--timeout` to set the timeout in seconds. 
-Use the flag `-j` or `--jobs` to set the maximum number of parallel jobs.
+Use the flag `-t` or `--timeout` to set the timeout in seconds (default one hour). 
+Use the flag `-j` or `--jobs` to set the maximum number of parallel jobs (default CPU count).
 
 ## Running benchmarks
 To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
 ```
 make benchmarks
 ```
-to run all the benchmarks with five minutes of timeout.
+to run all the benchmarks with five minutes of timeout per program. 
+Warning: this may take up to an hour to complete. 
+The results will be found in the `benchmarks` directory in the `.txt.results` files.
 Run
 ```
 make benchmarks-all

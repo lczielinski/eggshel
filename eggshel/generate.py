@@ -70,15 +70,15 @@ def generate_program(file, expr):
     bounds_query = " ".join(f"\"{var}\" {var}_p" for var in var_names)
 
     with open(file, "w") as f:
-        f.write(f"(let ex {expr})\n\n")
+        f.write(f"(let $ex {expr})\n\n")
         f.write(f"(rule ({" ".join(bases)})\n      ({ctx}))\n\n")
 
         f.write(f"(ruleset trans)\n\n")
-        f.write(f"(rule ((-> ctx2 ex) (-> ctx1 ctx2))\n      ((-> ctx1 ex)) :ruleset trans)\n\n")
-        
+        f.write(f"(rule ((-> ctx2 $ex) (-> ctx1 ctx2))\n      ((-> ctx1 $ex)) :ruleset trans)\n\n")
+
         f.write(f"(relation bounds ({bounds_type}))\n\n")
         f.write(f"(ruleset post)\n\n")
-        f.write(f"(rule ((-> {ctx} ex))\n      ((bounds {bounds_query})) :ruleset post)\n\n")
+        f.write(f"(rule ((-> {ctx} $ex))\n      ((bounds {bounds_query})) :ruleset post)\n\n")
         
         f.write(f"(run-schedule (seq (saturate (seq (run) (run trans))) (run post)))\n\n")
         f.write(f"(print-function bounds 10)\n\n")
