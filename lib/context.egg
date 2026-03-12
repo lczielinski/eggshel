@@ -21,12 +21,3 @@
     ;    (>= p 1.0)
        (= q (+ p 1.0)))
     ((-> (Star ctx1 (Base j e1 q)) e)))
-
-;; push adjuster with sibling
-; (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
-;        (= ctx2 (Base i e1 p))
-;        (< i 2.0)
-;        (= j (+ i 1.0))
-;     ;    (>= p 1.0)
-;        (= q (+ p 1.0)))
-;     ((-> (Star ctx1 (Tens (Base j e1 q) ctx3)) e)))

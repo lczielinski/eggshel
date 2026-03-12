@@ -1,2 +1,6 @@
 dotprod2 (Add (Mul x1 y1) (Mul x2 y2))
 dotprod3 (Add (Mul x1 y1) (Add (Mul x2 y2) (Mul x3 y3)))
+dotprod4 (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Mul x4 y4))))
+dotprod5 (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Add (Mul x4 y4) (Mul x5 y5)))))
+dotprod6 (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Add (Mul x4 y4) (Add (Mul x5 y5) (Mul x6 y6))))))
+dotprod7 (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Add (Mul x4 y4) (Add (Mul x5 y5) (Add (Mul x6 y6) (Mul x7 y7)))))))
