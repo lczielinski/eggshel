@@ -16,7 +16,7 @@ def generate_and_run(expr, timeout):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="eggshel", description="A backward error analysis tool.")
     parser.add_argument("expression", nargs="?", help="a single expression to evaluate")
-    parser.add_argument("-f", "--file", help="file with list of expressions")
+    parser.add_argument("-f", "--file", nargs="+", help="file with list of expressions")
     parser.add_argument("-t", "--timeout", type=int, default=3600, help="set timeout")
 
     args = parser.parse_args()
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     if args.expression is None and args.file is None:
         parser.error("Must provide an expression or file")
 
-    if args.file:
+    if args.file: # make it a list
         try:
             with open(args.file) as f:
                 source = f.read()

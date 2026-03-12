@@ -7,12 +7,9 @@ First, clone the repository. eggshel can be built manually or using the provided
 
 If you have [Docker](https://docs.docker.com/engine/install/), in the project root directory, run
 ```
-docker build -t eggshel .
+make docker
 ```
-After the Docker image builds, you can enter a TTY with
-```
-docker run -it --rm eggshel
-```
+to enter a TTY.
 
 ### Build manually
 
