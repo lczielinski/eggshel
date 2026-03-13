@@ -1,4 +1,5 @@
-eggshel: a floating-point backward error analysis tool described in Section 6 of the paper **Synthesizing Backward Error Bounds, Backward**. This project is licensed under the MIT license.
+# eggshel: a floating-point backward error analysis tool
+`eggshel` is the tool described in Section 6 of the paper **Synthesizing Backward Error Bounds, Backward**. This project is licensed under the MIT license.
 
 ## Getting started 
 First, clone the repository. eggshel can be built manually or using the provided Docker image.
@@ -9,7 +10,7 @@ If you have [Docker](https://docs.docker.com/engine/install/), in the project ro
 ```
 make docker
 ```
-to enter a pseudo-terminal. **To run benchmarks, make sure you allow Docker containers 16GB of memory.**
+to enter a pseudo-terminal. **To run medium or large benchmarks, make sure you allow Docker containers at least 16GB of memory.**
 
 ### Build manually
 
@@ -47,7 +48,7 @@ To run many programs, create a `.txt` file containing the programs like this:
 myprogram1 (Add a b)
 myprogram2 (Add a (Sqrt b))
 ```
-Run it like this:
+And run it like this:
 ```
 python3 -m eggshel -f myprograms.txt
 ```
@@ -67,30 +68,34 @@ Results:
 (1) Found bounds: a with 1.0ε, b with 4.0ε
 Took 0.026194458012469113 seconds
 ```
-You can also pass in multiple files. By default, programs will be executed in parallel.
+You can also pass in multiple files. By default, programs will be executed in parallel, unless the `-j 1` flag is passed.
 
 ## Options
 Use the flag `-t` or `--timeout` to set the timeout in seconds per program (default one hour). 
-Use the flag `-j` or `--jobs` to set the maximum number of parallel jobs (default CPU count).
+Use the flag `-j` or `--jobs` to set the maximum number of parallel jobs (default CPU count). 
+If you are having memory issues, we recommend setting `-j 1`.
 
 ## Running benchmarks
-**We recommend 16GB of memory to run the benchmarks.** To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
+To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile.
+**Warning: `eggshel` can be memory-intensive. We recommend at least 16GB of memory to run medium or large benchmarks.** Run 
 ```
-make benchmarks
+make small
 ```
-to run all the benchmarks with five minutes of timeout per program. 
-**Warning: this may take a few hours to complete.**
-The results will be found in the `benchmarks` directory in the `.txt.results` files. 
-
-If you are having memory issues, try 
+to run small benchmarks, which should complete within a few minutes. The results will be found in the `benchmarks` directory in the `.txt.results` files. To decrease the number of parallel jobs, run
 ```
-make benchmarks JOBS=2
+make small JOBS=<n>
 ```
-or the desired number of cores. Run 
+Run 
 ```
-make benchmarks TIMEOUT=3600
+make medium
 ```
-to achieve the full results. Run
+to run the benchmarks that take several minutes each. Run
+```
+make large
+```
+to run the large benchmarks that take up to an hour each. 
+Note that the medium and large benchmarks are run sequentially, not in parallel.
+Finally, run
 ```
 make clean
 ```

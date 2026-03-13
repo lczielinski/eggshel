@@ -1,0 +1,1 @@
+dotprod4 (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Mul x4 y4))))

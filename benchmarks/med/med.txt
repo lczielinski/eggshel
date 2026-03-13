@@ -1,3 +1,0 @@
-dotprod4 (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Mul x4 y4))))
-norm7 (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Add (Mul c c) (Mul d d))))))))
-quad5 (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Add (Mul x (Mul x c)) (Mul x (Mul x d))))))

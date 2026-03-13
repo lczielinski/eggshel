@@ -10,10 +10,10 @@ docker:
 	docker run -it --rm eggshel
 
 small:
-	python3 -m eggshel -f benchmarks/*.txt JOBS_FLAG
+	python3 -m eggshel -f benchmarks/*.txt $(JOBS_FLAG)
 
 medium:
-	python3 -m eggshel -f benchmarks/med/med.txt -j 1
+	python3 -m eggshel -f benchmarks/med/*.txt -j 1
 
 large:
-	python3 -m eggshel -f benchmarks/med/med.txt -j 1 -t 3600
+	python3 -m eggshel -f benchmarks/large/*.txt -j 1

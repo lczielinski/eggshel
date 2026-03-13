@@ -1,0 +1,1 @@
+quad5 (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Add (Mul x (Mul x c)) (Mul x (Mul x d))))))

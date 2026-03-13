@@ -1,5 +1,3 @@
-dotprod5 (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Add (Mul x4 y4) (Mul x5 y5)))))
-dotprod6 (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Add (Mul x4 y4) (Add (Mul x5 y5) (Mul x6 y6))))))
 linear7 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Mul f x)))))))
 linear8 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Add (Mul f x) (Mul g x))))))))
 norm8 (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Add (Mul c c) (Add (Mul d d) (Mul e e)))))))))
