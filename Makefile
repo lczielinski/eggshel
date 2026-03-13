@@ -1,6 +1,5 @@
 .PHONY: clean docker benchmarks
 
-TIMEOUT ?= 300
 JOBS_FLAG = $(if $(JOBS),-j $(JOBS),)
 
 clean:
@@ -10,5 +9,11 @@ docker:
 	docker build -t eggshel .
 	docker run -it --rm eggshel
 
-benchmarks:
-	python3 -m eggshel -f benchmarks/*.txt -t $(TIMEOUT) $(JOBS_FLAG)
+small:
+	python3 -m eggshel -f benchmarks/*.txt JOBS_FLAG
+
+medium:
+	python3 -m eggshel -f benchmarks/med/med.txt -j 1
+
+large:
+	python3 -m eggshel -f benchmarks/med/med.txt -j 1 -t 3600

@@ -54,6 +54,7 @@ if __name__ == "__main__":
                     output = f"Name: {name}\nExpression: {expr}\nResults:\n"
                     output += future.result()
                     results[i] = output
+                    print(f"{name} completed")
         except KeyboardInterrupt:
             sys.exit(1)
 

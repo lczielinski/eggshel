@@ -1,0 +1,30 @@
+Name: dotprod4
+Expression: (Add (Mul x1 y1) (Add (Mul x2 y2) (Add (Mul x3 y3) (Mul x4 y4))))
+Results:
+(1) Found bounds: x1 with 0.0ε, x2 with 0.0ε, x3 with 2.0ε, x4 with 0.0ε, y1 with 2.0ε, y2 with 3.0ε, y3 with 2.0ε, y4 with 4.0ε
+(2) Found bounds: x1 with 0.0ε, x2 with 0.0ε, x3 with 2.0ε, x4 with 2.0ε, y1 with 2.0ε, y2 with 3.0ε, y3 with 2.0ε, y4 with 2.0ε
+(3) Found bounds: x1 with 0.0ε, x2 with 0.0ε, x3 with 2.0ε, x4 with 4.0ε, y1 with 2.0ε, y2 with 3.0ε, y3 with 2.0ε, y4 with 0.0ε
+(4) Found bounds: x1 with 0.0ε, x2 with 1.5ε, x3 with 2.0ε, x4 with 0.0ε, y1 with 2.0ε, y2 with 1.5ε, y3 with 2.0ε, y4 with 4.0ε
+(5) Found bounds: x1 with 0.0ε, x2 with 1.5ε, x3 with 2.0ε, x4 with 2.0ε, y1 with 2.0ε, y2 with 1.5ε, y3 with 2.0ε, y4 with 2.0ε
+(6) Found bounds: x1 with 0.0ε, x2 with 1.5ε, x3 with 2.0ε, x4 with 4.0ε, y1 with 2.0ε, y2 with 1.5ε, y3 with 2.0ε, y4 with 0.0ε
+(7) Found bounds: x1 with 0.0ε, x2 with 3.0ε, x3 with 2.0ε, x4 with 0.0ε, y1 with 2.0ε, y2 with 0.0ε, y3 with 2.0ε, y4 with 4.0ε
+(8) Found bounds: x1 with 0.0ε, x2 with 3.0ε, x3 with 2.0ε, x4 with 2.0ε, y1 with 2.0ε, y2 with 0.0ε, y3 with 2.0ε, y4 with 2.0ε
+(9) Found bounds: x1 with 0.0ε, x2 with 3.0ε, x3 with 2.0ε, x4 with 4.0ε, y1 with 2.0ε, y2 with 0.0ε, y3 with 2.0ε, y4 with 0.0ε
+(10) Found bounds: x1 with 0.0ε, x2 with 0.0ε, x3 with 4.0ε, x4 with 0.0ε, y1 with 2.0ε, y2 with 3.0ε, y3 with 0.0ε, y4 with 4.0ε
+Took 121.75910958300028 seconds
+
+========================================
+
+Name: norm7
+Expression: (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Add (Mul c c) (Mul d d))))))))
+Results:
+(1) Found bounds: a with 3.5ε, b with 4.0ε, c with 4.5ε, d with 4.5ε, x with 2.0ε, y with 2.5ε, z with 3.0ε
+Took 291.7479541249995 seconds
+
+========================================
+
+Name: quad5
+Expression: (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Add (Mul x (Mul x c)) (Mul x (Mul x d))))))
+Results:
+(1) Found bounds: a with 4.0ε, b with 5.0ε, c with 6.0ε, d with 6.0ε, x with 1.0ε
+Took 138.60868550000032 seconds

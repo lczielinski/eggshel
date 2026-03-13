@@ -1,0 +1,30 @@
+Name: dotprod2
+Expression: (Add (Mul x1 y1) (Mul x2 y2))
+Results:
+(1) Found bounds: x1 with 0.0ε, x2 with 1.0ε, y1 with 2.0ε, y2 with 1.0ε
+(2) Found bounds: x1 with 0.0ε, x2 with 2.0ε, y1 with 2.0ε, y2 with 0.0ε
+(3) Found bounds: x1 with 0.0ε, x2 with 0.0ε, y1 with 2.0ε, y2 with 2.0ε
+(4) Found bounds: x1 with 1.0ε, x2 with 0.0ε, y1 with 1.0ε, y2 with 2.0ε
+(5) Found bounds: x1 with 1.0ε, x2 with 1.0ε, y1 with 1.0ε, y2 with 1.0ε
+(6) Found bounds: x1 with 1.0ε, x2 with 2.0ε, y1 with 1.0ε, y2 with 0.0ε
+(7) Found bounds: x1 with 2.0ε, x2 with 0.0ε, y1 with 0.0ε, y2 with 2.0ε
+(8) Found bounds: x1 with 2.0ε, x2 with 1.0ε, y1 with 0.0ε, y2 with 1.0ε
+(9) Found bounds: x1 with 2.0ε, x2 with 2.0ε, y1 with 0.0ε, y2 with 0.0ε
+Took 0.044280749999416 seconds
+
+========================================
+
+Name: dotprod3
+Expression: (Add (Mul x1 y1) (Add (Mul x2 y2) (Mul x3 y3)))
+Results:
+(1) Found bounds: x1 with 0.0ε, x2 with 3.0ε, x3 with 0.0ε, y1 with 2.0ε, y2 with 0.0ε, y3 with 3.0ε
+(2) Found bounds: x1 with 0.0ε, x2 with 1.5ε, x3 with 0.0ε, y1 with 2.0ε, y2 with 1.5ε, y3 with 3.0ε
+(3) Found bounds: x1 with 0.0ε, x2 with 3.0ε, x3 with 1.5ε, y1 with 2.0ε, y2 with 0.0ε, y3 with 1.5ε
+(4) Found bounds: x1 with 0.0ε, x2 with 1.5ε, x3 with 1.5ε, y1 with 2.0ε, y2 with 1.5ε, y3 with 1.5ε
+(5) Found bounds: x1 with 0.0ε, x2 with 3.0ε, x3 with 3.0ε, y1 with 2.0ε, y2 with 0.0ε, y3 with 0.0ε
+(6) Found bounds: x1 with 0.0ε, x2 with 1.5ε, x3 with 3.0ε, y1 with 2.0ε, y2 with 1.5ε, y3 with 0.0ε
+(7) Found bounds: x1 with 0.0ε, x2 with 0.0ε, x3 with 1.5ε, y1 with 2.0ε, y2 with 3.0ε, y3 with 1.5ε
+(8) Found bounds: x1 with 0.0ε, x2 with 0.0ε, x3 with 3.0ε, y1 with 2.0ε, y2 with 3.0ε, y3 with 0.0ε
+(9) Found bounds: x1 with 0.0ε, x2 with 0.0ε, x3 with 0.0ε, y1 with 2.0ε, y2 with 3.0ε, y3 with 3.0ε
+(10) Found bounds: x1 with 1.0ε, x2 with 0.0ε, x3 with 1.5ε, y1 with 1.0ε, y2 with 3.0ε, y3 with 1.5ε
+Took 0.6855355830002736 seconds

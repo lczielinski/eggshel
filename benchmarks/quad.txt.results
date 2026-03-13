@@ -1,0 +1,21 @@
+Name: quad2
+Expression: (Add x (Mul x (Mul x a)))
+Results:
+(1) Found bounds: a with 3.0ε, x with 1.0ε
+Took 0.019692124999892258 seconds
+
+========================================
+
+Name: quad3
+Expression: (Add x (Add (Mul x (Mul x a)) (Mul x (Mul x b))))
+Results:
+(1) Found bounds: a with 4.0ε, b with 4.0ε, x with 1.0ε
+Took 0.07190699999955541 seconds
+
+========================================
+
+Name: quad4
+Expression: (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Mul x (Mul x c)))))
+Results:
+(1) Found bounds: a with 4.0ε, b with 5.0ε, c with 5.0ε, x with 1.0ε
+Took 2.466345208000348 seconds

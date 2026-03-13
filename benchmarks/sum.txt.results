@@ -1,0 +1,37 @@
+Name: sum5
+Expression: (Add x1 (Add x2 (Add x3 (Add x4 x5))))
+Results:
+(1) Found bounds: x1 with 1.0ε, x2 with 2.0ε, x3 with 3.0ε, x4 with 4.0ε, x5 with 4.0ε
+Took 0.02813570800026355 seconds
+
+========================================
+
+Name: sum10
+Expression: (Add x1 (Add x2 (Add x3 (Add x4 (Add x5 (Add x6 (Add x7 (Add x8 (Add x9 x10)))))))))
+Results:
+(1) Found bounds: x1 with 1.0ε, x10 with 9.0ε, x2 with 2.0ε, x3 with 3.0ε, x4 with 4.0ε, x5 with 5.0ε, x6 with 6.0ε, x7 with 7.0ε, x8 with 8.0ε, x9 with 9.0ε
+Took 1.5139754159999939 seconds
+
+========================================
+
+Name: sum11
+Expression: (Add x1 (Add x2 (Add x3 (Add x4 (Add x5 (Add x6 (Add x7 (Add x8 (Add x9 (Add x10 x11))))))))))
+Results:
+(1) Found bounds: x1 with 1.0ε, x10 with 10.0ε, x11 with 10.0ε, x2 with 2.0ε, x3 with 3.0ε, x4 with 4.0ε, x5 with 5.0ε, x6 with 6.0ε, x7 with 7.0ε, x8 with 8.0ε, x9 with 9.0ε
+Took 4.87553166699945 seconds
+
+========================================
+
+Name: sum12
+Expression: (Add x1 (Add x2 (Add x3 (Add x4 (Add x5 (Add x6 (Add x7 (Add x8 (Add x9 (Add x10 (Add x11 x12)))))))))))
+Results:
+(1) Found bounds: x1 with 1.0ε, x10 with 10.0ε, x11 with 11.0ε, x12 with 11.0ε, x2 with 2.0ε, x3 with 3.0ε, x4 with 4.0ε, x5 with 5.0ε, x6 with 6.0ε, x7 with 7.0ε, x8 with 8.0ε, x9 with 9.0ε
+Took 17.594794958999955 seconds
+
+========================================
+
+Name: sum13
+Expression: (Add x1 (Add x2 (Add x3 (Add x4 (Add x5 (Add x6 (Add x7 (Add x8 (Add x9 (Add x10 (Add x11 (Add x12 x13))))))))))))
+Results:
+(1) Found bounds: x1 with 1.0ε, x10 with 10.0ε, x11 with 11.0ε, x12 with 12.0ε, x13 with 12.0ε, x2 with 2.0ε, x3 with 3.0ε, x4 with 4.0ε, x5 with 5.0ε, x6 with 6.0ε, x7 with 7.0ε, x8 with 8.0ε, x9 with 9.0ε
+Took 58.06904683300036 seconds

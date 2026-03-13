@@ -1,0 +1,142 @@
+Name: ex1
+Expression: (Add x (Add (Mul a x) (Mul (Mul b x) x)))
+Results:
+No bounds found.
+Took 0.024909290999858058 seconds
+
+========================================
+
+Name: ex2
+Expression: (Add a (Sqrt (Mul a b)))
+Results:
+(1) Found bounds: a with 1.0ε, b with 4.0ε
+Took 0.034004250000180036 seconds
+
+========================================
+
+Name: ex3
+Expression: (Mul (Add a b) (Add b a))
+Results:
+(1) Found bounds: a with 1.5ε, b with 1.5ε
+Took 0.021097249999911583 seconds
+
+========================================
+
+Name: ex4
+Expression: (Mul (Add a (Mul a b)) (Add c (Mul c d)))
+Results:
+(1) Found bounds: a with 1.0ε, b with 1.0ε, c with 2.0ε, d with 1.0ε
+(2) Found bounds: a with 1.5ε, b with 1.0ε, c with 1.5ε, d with 1.0ε
+(3) Found bounds: a with 2.0ε, b with 1.0ε, c with 1.0ε, d with 1.0ε
+Took 0.2557597919994805 seconds
+
+========================================
+
+Name: ex5
+Expression: (Add a (Mul a (Sqrt b)))
+Results:
+(1) Found bounds: a with 1.0ε, b with 4.0ε
+Took 0.041326666000713885 seconds
+
+========================================
+
+Name: ex6
+Expression: (Sqrt (Add (Mul a x) (Sqrt b)))
+Results:
+(1) Found bounds: a with 0.0ε, b with 8.0ε, x with 4.0ε
+(2) Found bounds: a with 2.0ε, b with 8.0ε, x with 2.0ε
+(3) Found bounds: a with 4.0ε, b with 8.0ε, x with 0.0ε
+Took 0.027176791999409033 seconds
+
+========================================
+
+Name: ex7
+Expression: (Mul (Add a b) (Add c d))
+Results:
+(1) Found bounds: a with 1.0ε, b with 1.0ε, c with 2.0ε, d with 2.0ε
+(2) Found bounds: a with 1.5ε, b with 1.5ε, c with 1.5ε, d with 1.5ε
+(3) Found bounds: a with 2.0ε, b with 2.0ε, c with 1.0ε, d with 1.0ε
+Took 0.025984166999478475 seconds
+
+========================================
+
+Name: ex8
+Expression: (Mul (Add a (Sqrt b)) (Add a (Sqrt b)))
+Results:
+(1) Found bounds: a with 1.5ε, b with 5.0ε
+Took 0.019422416999987036 seconds
+
+========================================
+
+Name: ex9
+Expression: (Add (Sqrt a) (Sqrt b))
+Results:
+(1) Found bounds: a with 4.0ε, b with 4.0ε
+Took 0.01917754199985211 seconds
+
+========================================
+
+Name: ex10
+Expression: (Mul (Sqrt a) (Sqrt b))
+Results:
+(1) Found bounds: a with 2.0ε, b with 4.0ε
+(2) Found bounds: a with 3.0ε, b with 3.0ε
+(3) Found bounds: a with 4.0ε, b with 2.0ε
+Took 0.02269104199967842 seconds
+
+========================================
+
+Name: ex11
+Expression: (Sqrt (Sqrt a))
+Results:
+(1) Found bounds: a with 6.0ε
+Took 0.018287999999301974 seconds
+
+========================================
+
+Name: ex12
+Expression: (Mul a (Mul b (Mul c d)))
+Results:
+(1) Found bounds: a with 0.0ε, b with 2.0ε, c with 0.5ε, d with 0.5ε
+(2) Found bounds: a with 0.0ε, b with 1.0ε, c with 1.0ε, d with 1.0ε
+(3) Found bounds: a with 0.0ε, b with 2.0ε, c with 1.0ε, d with 0.0ε
+(4) Found bounds: a with 0.0ε, b with 2.0ε, c with 0.0ε, d with 1.0ε
+(5) Found bounds: a with 0.0ε, b with 0.0ε, c with 1.5ε, d with 1.5ε
+(6) Found bounds: a with 0.0ε, b with 1.0ε, c with 2.0ε, d with 0.0ε
+(7) Found bounds: a with 0.0ε, b with 0.0ε, c with 3.0ε, d with 0.0ε
+(8) Found bounds: a with 0.0ε, b with 0.0ε, c with 0.0ε, d with 3.0ε
+(9) Found bounds: a with 0.0ε, b with 1.0ε, c with 0.0ε, d with 2.0ε
+(10) Found bounds: a with 0.5ε, b with 1.5ε, c with 0.5ε, d with 0.5ε
+Took 0.10094270799982041 seconds
+
+========================================
+
+Name: ex13
+Expression: (Add (Mul a (Sqrt b)) (Mul c (Sqrt d)))
+Results:
+(1) Found bounds: a with 0.0ε, b with 6.0ε, c with 0.0ε, d with 6.0ε
+(2) Found bounds: a with 0.0ε, b with 6.0ε, c with 1.0ε, d with 4.0ε
+(3) Found bounds: a with 0.0ε, b with 6.0ε, c with 2.0ε, d with 2.0ε
+(4) Found bounds: a with 1.0ε, b with 4.0ε, c with 0.0ε, d with 6.0ε
+(5) Found bounds: a with 1.0ε, b with 4.0ε, c with 1.0ε, d with 4.0ε
+(6) Found bounds: a with 1.0ε, b with 4.0ε, c with 2.0ε, d with 2.0ε
+(7) Found bounds: a with 2.0ε, b with 2.0ε, c with 2.0ε, d with 2.0ε
+(8) Found bounds: a with 2.0ε, b with 2.0ε, c with 0.0ε, d with 6.0ε
+(9) Found bounds: a with 2.0ε, b with 2.0ε, c with 1.0ε, d with 4.0ε
+Took 0.05089591700016172 seconds
+
+========================================
+
+Name: ex14
+Expression: (Mul x (Add a (Sqrt (Mul b x))))
+Results:
+No bounds found.
+Took 0.030056667000280868 seconds
+
+========================================
+
+Name: ex15
+Expression: (Sqrt (Add a (Sqrt (Sqrt b))))
+Results:
+(1) Found bounds: a with 3.0ε, b with 18.0ε
+Took 0.01850570799979323 seconds

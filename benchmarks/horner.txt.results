@@ -1,0 +1,13 @@
+Name: horner2
+Expression: (Add a0 (Mul z (Add a1 (Mul z a2))))
+Results:
+No bounds found.
+Took 0.033918374999302614 seconds
+
+========================================
+
+Name: horner3
+Expression: (Add a0 (Mul z (Add a1 (Mul z (Add a2 (Mul z a3))))))
+Results:
+No bounds found.
+Took 0.4336587919997328 seconds

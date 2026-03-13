@@ -1,0 +1,15 @@
+Name: polyval2
+Expression: (Add a0 (Mul z a1))
+Results:
+(1) Found bounds: a0 with 1.0ε, a1 with 0.0ε, z with 2.0ε
+(2) Found bounds: a0 with 1.0ε, a1 with 2.0ε, z with 0.0ε
+(3) Found bounds: a0 with 1.0ε, a1 with 1.0ε, z with 1.0ε
+Took 0.01963879100003396 seconds
+
+========================================
+
+Name: polyval3
+Expression: (Add a0 (Add (Mul z a1) (Mul z (Mul z a2))))
+Results:
+No bounds found.
+Took 0.03691887500008306 seconds
