@@ -89,11 +89,11 @@ Run
 ```
 make medium
 ```
-to run the benchmarks that take several minutes each. Run
+to run the benchmarks that take several minutes each and find the results in `benchmarks/med`. Run
 ```
 make large
 ```
-to run the large benchmarks that take up to an hour each. 
+to run the large benchmarks that take up to an hour each and find the results in `benchmarks/large`. 
 Note that the medium and large benchmarks are run sequentially, not in parallel.
 Finally, run
 ```
