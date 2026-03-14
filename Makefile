@@ -7,7 +7,7 @@ clean:
 
 docker:
 	docker build -t eggshel .
-	docker run -it --rm eggshel
+	docker run -it --rm eggshel 
 
 benchmarks:
 	python3 -m eggshel -f benchmarks/*.txt $(JOBS_FLAG)

@@ -10,7 +10,7 @@ If you have [Docker](https://docs.docker.com/engine/install/), in the project ro
 ```
 make docker
 ```
-to enter a pseudo-terminal. **To run the large benchmarks, make sure you allow Docker containers at least 16GB of memory.**
+to enter a pseudo-terminal. **To run the large benchmarks, make sure you allow Docker containers at least 20GB of memory.**
 
 ### Build manually
 
@@ -38,7 +38,11 @@ Took 0.02878616697853431 seconds
 This is a backward error result for the program with respect to `x` and `y` individually.
 The error is given in terms of $\varepsilon$, where $\varepsilon = u / (1 - u)$ and $u$ is unit roundoff ($2^{-53}$ for IEEE 754 double precision).
 
-**Theorem.** For any floating-point inputs `x` and `y`, there exist real numbers $\tilde{x}$ and $\tilde{y}$ such that $\sqrt{\tilde{x}+\tilde{y}}=$`(Sqrt (Add x y))`. The backward error bounds tell us that $|\ln(x/\tilde{x})|\leq 3\varepsilon$ and $|\ln(y/\tilde{y})|\leq 3\varepsilon$.
+
+
+**Backward error result.** For any floating-point inputs `x` and `y`, there exist real numbers $\tilde{x}$ and $\tilde{y}$ such that $\sqrt{\tilde{x}+\tilde{y}}=$`(Sqrt (Add x y))`. The backward error bounds tell us that $|\ln(x/\tilde{x})|\leq 3\varepsilon$ and $|\ln(y/\tilde{y})|\leq 3\varepsilon$.
+
+An analogous result holds for any program that `eggshel` finds bounds for.
 
 It is possible that no bounds are found, many bounds are found, or the program times out. If no bounds are found, then either the program is not backward stable, or `eggshel` was unable to find a proof. If many bounds are found (up to 10 will be returned), this means there were multiple valid ways to distribute the backward error. 
 
@@ -76,8 +80,7 @@ Use the flag `-j` or `--jobs` to set the maximum number of parallel jobs (defaul
 If you are having memory issues, we recommend setting `-j 1`.
 
 ## Running benchmarks
-To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile.
-**Warning: `eggshel` can be memory-intensive. We recommend at least 16GB of memory to run large benchmarks.** Run 
+To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile. Run 
 ```
 make benchmarks
 ```
@@ -85,9 +88,9 @@ to run small benchmarks, which should complete within a few minutes. The results
 ```
 make benchmarks JOBS=<n>
 ```
-Run
+**Warning: `eggshel` can be memory-intensive. We recommend at least 20GB of memory to run large benchmarks.** Run
 ```
-make benchmarks-large
+make large
 ```
 to run the large benchmarks that several minutes each and find the results in `benchmarks/large`. 
 Note that the large benchmarks are run sequentially, not in parallel.
