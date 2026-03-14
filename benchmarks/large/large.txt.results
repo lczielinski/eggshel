@@ -1,0 +1,5 @@
+Name: linear7
+Expression: (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Mul f x)))))))
+Results:
+(1) Found bounds: a with 2.0ε, b with 3.0ε, c with 4.0ε, d with 5.0ε, e with 6.0ε, f with 6.0ε, x with 1.0ε
+Took 352.8454622499994 seconds

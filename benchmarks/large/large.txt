@@ -1,8 +1,1 @@
 linear7 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Mul f x)))))))
-linear8 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Add (Mul f x) (Mul g x))))))))
-norm8 (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Add (Mul c c) (Add (Mul d d) (Mul e e)))))))))
-norm9 (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Add (Mul c c) (Add (Mul d d) (Add (Mul e e) (Mul f f))))))))))
-quad6 (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Add (Mul x (Mul x c)) (Add (Mul x (Mul x d)) (Mul x (Mul x e)))))))
-quad7 (Add x (Add (Mul x (Mul x a)) (Add (Mul x (Mul x b)) (Add (Mul x (Mul x c)) (Add (Mul x (Mul x d)) (Add (Mul x (Mul x e)) (Mul x (Mul x f))))))))
-sum14 (Add x1 (Add x2 (Add x3 (Add x4 (Add x5 (Add x6 (Add x7 (Add x8 (Add x9 (Add x10 (Add x11 (Add x12 (Add x13 x14)))))))))))))
-sum15 (Add x1 (Add x2 (Add x3 (Add x4 (Add x5 (Add x6 (Add x7 (Add x8 (Add x9 (Add x10 (Add x11 (Add x12 (Add x13 (Add x14 x15))))))))))))))
