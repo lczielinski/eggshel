@@ -1,1 +1,0 @@
-linear7 (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Mul f x)))))))

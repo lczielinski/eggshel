@@ -10,7 +10,7 @@ If you have [Docker](https://docs.docker.com/engine/install/), in the project ro
 ```
 make docker
 ```
-to enter a pseudo-terminal. **To run medium or large benchmarks, make sure you allow Docker containers at least 16GB of memory.**
+to enter a pseudo-terminal. **To run the large benchmarks, make sure you allow Docker containers at least 16GB of memory.**
 
 ### Build manually
 
@@ -77,24 +77,20 @@ If you are having memory issues, we recommend setting `-j 1`.
 
 ## Running benchmarks
 To run the benchmarks given in Section 6.3 of the paper, use the provided Makefile.
-**Warning: `eggshel` can be memory-intensive. We recommend at least 16GB of memory to run medium or large benchmarks.** Run 
+**Warning: `eggshel` can be memory-intensive. We recommend at least 16GB of memory to run large benchmarks.** Run 
 ```
-make small
+make benchmarks
 ```
 to run small benchmarks, which should complete within a few minutes. The results will be found in the `benchmarks` directory in the `.txt.results` files. To decrease the number of parallel jobs, run
 ```
-make small JOBS=<n>
+make benchmarks JOBS=<n>
 ```
-Run 
+Run
 ```
-make medium
+make benchmarks-large
 ```
-to run the benchmarks that take several minutes each and find the results in `benchmarks/med`. Run
-```
-make large
-```
-to run the large benchmarks that take up to an hour each and find the results in `benchmarks/large`. 
-Note that the medium and large benchmarks are run sequentially, not in parallel.
+to run the large benchmarks that several minutes each and find the results in `benchmarks/large`. 
+Note that the large benchmarks are run sequentially, not in parallel.
 Finally, run
 ```
 make clean
