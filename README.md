@@ -92,7 +92,7 @@ make benchmarks JOBS=<n>
 ```
 make large
 ```
-to run the large benchmarks that several minutes each and find the results in `benchmarks/large`. 
+to run the large benchmarks that take several minutes each and find the results in `benchmarks/large`. 
 Note that the large benchmarks are run sequentially, not in parallel.
 Finally, run
 ```

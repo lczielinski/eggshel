@@ -1,4 +1,4 @@
-.PHONY: clean docker benchmarks
+.PHONY: clean docker benchmarks large
 
 JOBS_FLAG = $(if $(JOBS),-j $(JOBS),)
 
