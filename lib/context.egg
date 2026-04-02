@@ -8,3 +8,13 @@
 (rule ((= e (Star ctx1 (Tens ctx2 ctx3)))
        (= ctx3 (Base 0.0 e1 p)))
     ((-> (Tens (Star ctx1 ctx2) ctx3) e)))
+
+;; a *i+1 b -> a*i b
+(rule ((= e (Star ctx1 ctx2))
+       (= ctx1 (Base 0.0 e1 p)) 
+       (= ctx2 (Base i e2 q))
+       (< i 2.0)
+       (= j (+ i 1.0))
+       (<= q 1.0)
+       (= r (+ p q)))
+    ((-> (Star ctx1 (Base j e2 r)) e)))
