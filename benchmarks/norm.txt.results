@@ -1,0 +1,45 @@
+Name: norm1
+Expression: (Sqrt (Mul x x))
+Results:
+(1) Found bounds: x with 1.5ε
+Took 0.029451166003127582 seconds
+
+========================================
+
+Name: norm2
+Expression: (Sqrt (Add (Mul x x) (Mul y y)))
+Results:
+(1) Found bounds: x with 2.0ε, y with 2.0ε
+Took 0.02468070900067687 seconds
+
+========================================
+
+Name: norm3
+Expression: (Sqrt (Add (Mul x x) (Add (Mul y y) (Mul z z))))
+Results:
+(1) Found bounds: x with 2.0ε, y with 2.5ε, z with 2.5ε
+Took 0.03674441599287093 seconds
+
+========================================
+
+Name: norm4
+Expression: (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Mul a a)))))
+Results:
+(1) Found bounds: a with 3.0ε, x with 2.0ε, y with 2.5ε, z with 3.0ε
+Took 0.12069483300729189 seconds
+
+========================================
+
+Name: norm5
+Expression: (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Mul b b))))))
+Results:
+(1) Found bounds: a with 3.5ε, b with 3.5ε, x with 2.0ε, y with 2.5ε, z with 3.0ε
+Took 1.35982833399612 seconds
+
+========================================
+
+Name: norm6
+Expression: (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Mul c c)))))))
+Results:
+(1) Found bounds: a with 3.5ε, b with 4.0ε, c with 4.0ε, x with 2.0ε, y with 2.5ε, z with 3.0ε
+Took 16.96379441700992 seconds

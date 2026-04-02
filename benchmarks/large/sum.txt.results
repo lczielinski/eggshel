@@ -1,0 +1,5 @@
+Name: sum14
+Expression: (Add x1 (Add x2 (Add x3 (Add x4 (Add x5 (Add x6 (Add x7 (Add x8 (Add x9 (Add x10 (Add x11 (Add x12 (Add x13 x14)))))))))))))
+Results:
+(1) Found bounds: x1 with 1.0ε, x10 with 10.0ε, x11 with 11.0ε, x12 with 12.0ε, x13 with 13.0ε, x14 with 13.0ε, x2 with 2.0ε, x3 with 3.0ε, x4 with 4.0ε, x5 with 5.0ε, x6 with 6.0ε, x7 with 7.0ε, x8 with 8.0ε, x9 with 9.0ε
+Took 379.876418749991 seconds

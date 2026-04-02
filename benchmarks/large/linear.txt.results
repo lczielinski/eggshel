@@ -1,0 +1,8 @@
+Name: linear7
+Expression: (Add x (Add (Mul a x) (Add (Mul b x) (Add (Mul c x) (Add (Mul d x) (Add (Mul e x) (Mul f x)))))))
+Results:
+Error (code 101):
+
+thread 'main' panicked at /Users/lcz8/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egglog-core-relations-2.0.0/src/table/mod.rs:688:37:
+inserting row that violates sort order (Value(0) vs. Value(166))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

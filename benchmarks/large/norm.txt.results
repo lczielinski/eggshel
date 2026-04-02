@@ -1,0 +1,5 @@
+Name: norm7
+Expression: (Sqrt (Add (Mul x x) (Add (Mul y y) (Add (Mul z z) (Add (Mul a a) (Add (Mul b b) (Add (Mul c c) (Mul d d))))))))
+Results:
+(1) Found bounds: a with 3.5ε, b with 4.0ε, c with 4.5ε, d with 4.5ε, x with 2.0ε, y with 2.5ε, z with 3.0ε
+Took 298.61889870799496 seconds
